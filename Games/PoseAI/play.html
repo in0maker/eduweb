@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pose AI - inomaker</title>
+    
+    <!-- MediaPipe ve CameraUtils Kütüphaneleri -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            margin: 0; padding: 20px;
+            background-color: #EEC21A;
+            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; box-sizing: border-box; touch-action: manipulation;
+            user-select: none; -webkit-tap-highlight-color: transparent;
+        }
+
+        .header-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; max-width: 800px; margin-bottom: 15px;
+        }
+
+        .score-board {
+            background: #ffffff; padding: 12px 25px; border-radius: 25px;
+            font-size: 1.5rem; color: #2b2b2b; box-shadow: 0 6px 0 #cccccc;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .btn-back {
+            background-color: #ff5252; color: white; border: none;
+            border-radius: 20px; padding: 12px 25px; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; box-shadow: 0 5px 0 #d32f2f; transition: all 0.1s;
+        }
+        .btn-back:active { transform: translateY(5px); box-shadow: 0 0 0 #d32f2f; }
+
+        .game-container {
+            position: relative; width: 100%; max-width: 800px;
+            aspect-ratio: 4 / 3; background: #000; border-radius: 35px;
+            overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 6px solid #ffffff;
+        }
+
+        /* Aynalama etkisi için video ve canvas çevriliyor */
+        #webcam, #output_canvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            transform: scaleX(-1); object-fit: cover;
+        }
+
+        .instruction-box {
+            margin-top: 15px; background: #fffdf6; padding: 15px 30px;
+            border-radius: 25px; font-size: 1.2rem; font-weight: bold;
+            color: #2b2b2b; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .score-board { font-size: 1.1rem; padding: 8px 16px; }
+            .btn-back { font-size: 1rem; padding: 8px 16px; }
+            .instruction-box { font-size: 1rem; padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <button class="btn-back" onclick="location.href='../../index.html#levels'">◀ Menü</button>
+        <div class="score-board">⭐ Puan: <span id="score">0</span></div>
+    </div>
+
+    <div class="game-container">
+        <video id="webcam" playsinline></video>
+        <canvas id="output_canvas"></canvas>
+    </div>
+
+    <div class="instruction-box">
+        💃 Ellerini kullanarak ekrandaki sarı yıldızlara dokun!
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('webcam');
+        const canvasElement = document.getElementById('output_canvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        const scoreElement = document.getElementById('score');
+
+        let score = 0;
+        let target = { x: 0.5, y: 0.5, radius: 40 };
+
+        function resetTarget() {
+            // Yıldızın ekran kenarlarına çok yakın çıkmaması için sınırlar
+            target.x = 0.15 + Math.random() * 0.7;
+            target.y = 0.15 + Math.random() * 0.7;
+        }
+
+        function onResults(results) {
+            // Canvas boyutlandırma
+            canvasElement.width = videoElement.videoWidth || 640;
+            canvasElement.height = videoElement.videoHeight || 480;
+
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+            // Kamera görüntüsünü çizme
+            canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+            const w = canvasElement.width;
+            const h = canvasElement.height;
+
+            // Target (Yıldız) Çizimi
+            const targetX = target.x * w;
+            const targetY = target.y * h;
+
+            canvasCtx.beginPath();
+            canvasCtx.arc(targetX, targetY, target.radius, 0, 2 * Math.PI);
+            canvasCtx.fillStyle = '#ffee55';
+            canvasCtx.fill();
+            canvasCtx.lineWidth = 5;
+            canvasCtx.strokeStyle = '#ff9800';
+            canvasCtx.stroke();
+
+            // Yıldız simgesi
+            canvasCtx.fillStyle = '#d32f2f';
+            canvasCtx.font = 'bold 30px Arial';
+            canvasCtx.textAlign = 'center';
+            canvasCtx.textBaseline = 'middle';
+            canvasCtx.fillText('★', targetX, targetY);
+
+            // Pose İskelet Tespiti
+            if (results.poseLandmarks) {
+                // Sol El (Landmark 19 veya 15) ve Sağ El (Landmark 20 veya 16)
+                const leftHand = results.poseLandmarks[19] || results.poseLandmarks[15];
+                const rightHand = results.poseLandmarks[20] || results.poseLandmarks[16];
+
+                const hands = [leftHand, rightHand].filter(Boolean);
+
+                hands.forEach(hand => {
+                    const handX = hand.x * w;
+                    const handY = hand.y * h;
+
+                    // El üzerine renkli daire çizimi
+                    canvasCtx.beginPath();
+                    canvasCtx.arc(handX, handY, 18, 0, 2 * Math.PI);
+                    canvasCtx.fillStyle = '#ff5252';
+                    canvasCtx.fill();
+                    canvasCtx.strokeStyle = '#ffffff';
+                    canvasCtx.lineWidth = 3;
+                    canvasCtx.stroke();
+
+                    // Mesafe Kontrolü (Aynalama efekti nedeniyle X ekseni terslenebilir ancak mesafe değişmez)
+                    const dist = Math.hypot(handX - targetX, handY - targetY);
+
+                    if (dist < target.radius + 18) {
+                        score += 10;
+                        scoreElement.innerText = score;
+                        resetTarget();
+                    }
+                });
+            }
+            canvasCtx.restore();
+        }
+
+        // MediaPipe Pose Kurulumu
+        const pose = new Pose({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        });
+
+        pose.setOptions({
+            modelComplexity: 1,
+            smoothLandmarks: true,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+
+        pose.onResults(onResults);
+
+        // Kamera Başlatma
+        const camera = new Camera(videoElement, {
+            onFrame: async () => {
+                await pose.send({ image: videoElement });
+            },
+            width: 640,
+            height: 480
+        });
+
+        camera.start();
+        resetTarget();
+    </script>
+</body>
+</html>
