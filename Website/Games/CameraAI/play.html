@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>inomaker - Eğitim Portalı</title>
+    <style>
+        /* Temel Sayfa Ayarları ve Tablet Dokunmatik Optimizasyonu */
+        body {
+            margin: 0; 
+            padding: 0;
+            background-color: #EEC21A;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            touch-action: manipulation;
+           
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+	/* Oyun Çerçevesi - Gelişmiş Sığdırma Algoritması */
+        .game-wrapper {
+            /* 16:9 Oranını Korumak İçin Maksimum Ekran Kullanımı */
+            width: 90vw; 
+            max-width: calc(80vh * (16 / 9)); /* Ekran yüksekliğine göre genişliği sınırlar */
+            
+            height: 80vh;
+            max-height: calc(90vw * (9 / 16)); /* Ekran genişliğine göre yüksekliği sınırlar */
+            
+            position: relative;
+            z-index: 1; 
+            border-radius: 35px;
+            overflow: hidden; 
+            background-color: #EEC21A;
+            
+            /* İçeriği tam merkeze sabitlemek için eklendi */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Tam ekran yapıldığında çerçevenin kenar boşluklarını sıfırlar */
+        .game-wrapper:fullscreen, 
+        .game-wrapper:-webkit-full-screen {
+            max-width: 100vw;
+            max-height: 100vh;
+            border-radius: 0;
+            aspect-ratio: auto;
+        }
+
+        /* Iframe Oyunun İçine Tam Sığar */
+        iframe {
+            width: 100%; 
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+      
+       /* Sol Üst Köşe Marka Logosu */
+        .logo-img {
+            position: absolute; 
+            top: 15px; /* 30px'ten 15px'e düşürdük */
+            left: 15px; /* 30px'ten 15px'e düşürdük */
+            width: 25%; /* Yüzdeyi küçülttük */
+            max-width: 110px; /* Maksimum genişliği 220px'ten 110px'e çektik */
+            height: auto;
+            z-index: 10; 
+            pointer-events: none; 
+        }
+
+        /* Sol Alt Köşe Geri Dön Butonu */
+        .btn-back {
+            position: absolute; 
+            bottom: 30px; 
+            left: 30px;
+            background-color: #FA4949; /* Resimdeki kırmızı ton */
+            border: none;
+            border-radius: 30px; /* Hap (pill) görünümü */
+            padding: 12px 28px;
+            color: white; 
+            font-size: 24px; 
+            font-weight: bold; 
+            cursor: pointer;
+            box-shadow: 0 6px 0 #C93333; /* 3 Boyutlu gölge efekti */
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        /* Sağ Alt Köşe Tam Ekran Butonu - YENİ */
+        .btn-fullscreen {
+            position: absolute; 
+            bottom: 30px; 
+            right: 30px;
+            background-color: #3498db; /* Şık bir mavi ton */
+            border: none;
+            border-radius: 30px; 
+            padding: 12px 28px;
+            color: white; 
+            font-size: 24px; 
+            font-weight: bold; 
+            cursor: pointer;
+            box-shadow: 0 6px 0 #2980b9; /* 3 Boyutlu gölge efekti */
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        /* Tıklama Animasyonları */
+        .btn-back:active, .btn-fullscreen:active {
+            transform: translateY(6px); /* Buton aşağı çöker */
+            box-shadow: 0 0px 0 transparent; /* Gölge kaybolur */
+        }
+
+        .btn-back span, .btn-fullscreen span {
+            font-size: 24px; 
+        }
+    </style>
+</head>
+<body>
+
+    <img src="../../logo.png" alt="inomaker logo" class="logo-img">
+
+   
+<div class="game-wrapper" id="gameWrapper">
+        <iframe src="game.html" 
+                scrolling="no" 
+                allow="fullscreen; autoplay; touch-action" 
+                style="touch-action: manipulation;">
+        </iframe>
+    </div>
+
+    <button class="btn-back" onclick="location.href='../../index.html#levels'">
+        <span>◀</span> Geri Dön
+    </button>
+
+    <button class="btn-fullscreen" onclick="toggleFullScreen()">
+        <span>⤢</span> Tam Ekran
+    </button>
+
+    <script>
+        function toggleFullScreen() {
+            const wrapper = document.getElementById("gameWrapper");
+            
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                // Tam ekrana geç
+                if (wrapper.requestFullscreen) {
+                    wrapper.requestFullscreen();
+                } else if (wrapper.webkitRequestFullscreen) { /* Safari */
+                    wrapper.webkitRequestFullscreen();
+                } else if (wrapper.msRequestFullscreen) { /* IE11 */
+                    wrapper.msRequestFullscreen();
+                }
+            } else {
+                // Tam ekrandan çık
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
