@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Etik Dedektifi - inomaker</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+            background-color: #EEC21A;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; box-sizing: border-box;
+        }
+        .container {
+            background: #ffffff; border-radius: 30px; padding: 25px;
+            max-width: 680px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            text-align: center; margin-top: 10px;
+        }
+        h1 { color: #1c66ed; margin-bottom: 5px; }
+        .score-board { font-size: 1.1rem; font-weight: bold; color: #555; margin-bottom: 15px; }
+        .case-card {
+            background: #fff8e1; border: 2px solid #ffe082;
+            border-radius: 20px; padding: 20px; margin: 15px 0; text-align: left;
+        }
+        .case-title { font-size: 1.25rem; font-weight: bold; color: #d84315; margin-bottom: 8px; }
+        .case-text { font-size: 1.05rem; line-height: 1.4; color: #333; margin-bottom: 15px; }
+        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .choice-btn {
+            background: #e3f2fd; border: 2px solid #90caf9; border-radius: 15px;
+            padding: 12px; font-size: 0.98rem; cursor: pointer; font-family: inherit;
+            font-weight: bold; color: #1565c0; text-align: left; transition: all 0.2s; line-height: 1.3;
+        }
+        .choice-btn:hover { background: #bbdefb; }
+        .explanation {
+            margin-top: 15px; padding: 15px; border-radius: 12px;
+            font-weight: bold; display: none; text-align: left; line-height: 1.4; font-size: 1rem;
+        }
+        .btn-action {
+            background: #27ae60; color: white; border: none; padding: 12px 25px;
+            border-radius: 20px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
+            box-shadow: 0 5px 0 #1e8449; margin-top: 10px; display: none; margin-right: 10px;
+        }
+        .btn-home {
+            background: #ff5252; color: white; border: none; padding: 12px 25px;
+            border-radius: 20px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
+            box-shadow: 0 5px 0 #d32f2f; margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>⚖️ AI Etik Dedektifi</h1>
+        <p>Aşağıdaki gerçekçi vakaları incele ve Yapay Zeka kararlarını etik açıdan değerlendir!</p>
+
+        <div class="score-board">Vaka: <span id="case-num">1</span>/5</div>
+
+        <div class="case-card">
+            <div class="case-title" id="case-title">Yükleniyor...</div>
+            <div class="case-text" id="case-text">...</div>
+            
+            <div class="options-grid" id="options-grid"></div>
+
+            <div class="explanation" id="exp-box"></div>
+        </div>
+
+        <div style="display:flex; justify-content:center; align-items:center;">
+            <button class="btn-action" id="next-btn" onclick="nextCase()">Sonraki Vaka ▶</button>
+            <button class="btn-home" onclick="window.history.back()">◀ Ana Menüye Dön</button>
+        </div>
+    </div>
+
+    <script>
+        const cases = [
+            {
+                title: "🕵️ Vaka 1: Akıllı Sınıf Kaptanı Seçimi",
+                text: "Bir okul, sınıf temsilcisini seçmek için yapay zeka kullandı. Yapay zeka, geçmiş 10 yılın verilerine baktığında hep erkek öğrencilerin seçildiğini gördü ve aday listesine sadece erkek öğrencileri ekledi.",
+                options: [
+                    { text: " Bu karar adil değil! Yapay zeka geçmiş verilerdeki önyargıyı (bias) kopyalamış.", isCorrect: true, exp: "🎉 Doğru Tespit! Yapay zekalar geçmişteki hatalı insan kararlarını öğrenip önyargılı (bias) davranabilirler. Verilerin dengeli olması şarttır." },
+                    { text: " Yapay zeka geçmiş verilere baktığı için tamamen doğru ve tarafsız bir karar vermiştir.", isCorrect: false, exp: "❌ Hatalı! Yapay zekaya verilen veri önyargılıysa, çıkardığı sonuç da adaletsiz olur." }
+                ]
+            },
+            {
+                title: "🕵️ Vaka 2: Okul Kantininde Yüz Tanıma",
+                text: "Bir okul, öğrencilerin kantinde sıra beklemeden ödeme yapabilmesi için tüm öğrencilerin yüzlerini izinsiz tarayıp sisteme kaydetti.",
+                options: [
+                    { text: " Hızlı ödeme güzel ama kişisel biyometrik verilerin izinsiz toplanması gizlilik ihlalidir.", isCorrect: true, exp: "🎉 Doğru Tespit! Biyometrik veriler (yüz, parmak izi) kişiseldir. Veli ve öğrenci izni (açık rıza) alınmadan toplanamaz." },
+                    { text: " Sırada beklemeyi engellediği için teknoloji her koşulda kullanılmalıdır.", isCorrect: false, exp: "❌ Hatalı! Kolaylık sağlasa bile kişisel verilerin gizliliği ve güvenliği ihlal edilemez." }
+                ]
+            },
+            {
+                title: "🕵️ Vaka 3: Sınav Notu Veren AI Asistanı",
+                text: "Bir öğretmen, öğrencilerin resim ödevlerini puanlamak için bir yapay zeka kullandı. Ancak yapay zeka sadece kendi eğitildiği sanat tarzına benzeyen resimlere 100 puan verdi, farklı yaratıcı stillere düşük puan verdi.",
+                options: [
+                    { text: " Sanat ve yaratıcılık tek bir kalıba sığdırılamaz. AI tek başına puanlamamalıdır.", isCorrect: true, exp: "🎉 Harika! Sanat, duygu ve özgünlük içerir. Yapay zeka algoritmaları yaratıcılığı kısıtlamamalı, sadece yardımcı araç olmalıdır." },
+                    { text: " Yapay zeka en tarafsız jüridir, standart dışı resimler düşük puan almalıdır.", isCorrect: false, exp: "❌ Hatalı! Yaratıcılık standart kalıplara sığdırılamaz." }
+                ]
+            },
+            {
+                title: "🕵️ Vaka 4: Otonom Araç ve Güvenlik Sorumluluğu",
+                text: "Sürücüsüz bir otonom araç yolda giderken önüne aniden bir engel çıktı. Araç yazılımı fren yapmak yerine direksiyonu kırarak kaldırımdaki boş çöp kutusuna çarptı.",
+                options: [
+                    { text: " Yapay zeka canlılara zarar vermemek adına en az hasarlı seçeneği tercih etmiştir.", isCorrect: true, exp: "🎉 Doğru Tespit! Otonom araç yazılımları insan hayatını ve canlı güvenliğini en ön planda tutacak etik algoritmalarla kodlanır." },
+                    { text: " Araç ne olursa olsun şeridinden hiç çıkmamalıydı.", isCorrect: false, exp: "❌ Hatalı! Otonom araçlar kaza anında zararı en aza indirecek kararları almalıdır." }
+                ]
+            },
+            {
+                title: "🕵️ Vaka 5: Yapay Zeka ve Resim Telif Hakları",
+                text: "Bir yapay zeka modeli, internetteki binlerce ressamın çizimlerini izinsiz tarayarak öğrendi. Şimdi bu yapay zeka ile üretilen resimler yarışmalarda birincilik ödülü kazanıyor.",
+                options: [
+                    { text: " Gerçek sanatçıların emekleri ve tarzları izinsiz kullanıldığı için telif hakkı sorunu vardır.", isCorrect: true, exp: "🎉 Mükemmel! Yapay zekanın eğitildiği verilerin etik yollarla ve sanatçıların izniyle toplanması telif hakları açısından çok önemlidir." },
+                    { text: " İnternetteki her resim serbestçe kullanılabilir, hiçbir sorun yoktur.", isCorrect: false, exp: "❌ Hatalı! Sanatçıların telif hakları ve emekleri korunmalıdır." }
+                ]
+            }
+        ];
+
+        let currentCase = 0;
+        let caseAnswered = false;
+
+        function loadCase() {
+            caseAnswered = false;
+            const c = cases[currentCase];
+            document.getElementById('case-num').innerText = currentCase + 1;
+            document.getElementById('case-title').innerText = c.title;
+            document.getElementById('case-text').innerText = c.text;
+            
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+
+            const exp = document.getElementById('exp-box');
+            exp.style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+
+            c.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(opt);
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectOption(opt) {
+            if (caseAnswered) return;
+            caseAnswered = true;
+
+            const exp = document.getElementById('exp-box');
+            exp.style.display = 'block';
+            exp.innerText = opt.exp;
+
+            if (opt.isCorrect) {
+                exp.style.background = '#e8f5e9';
+                exp.style.color = '#2e7d32';
+                exp.style.border = '2px solid #a5d6a7';
+            } else {
+                exp.style.background = '#ffebee';
+                exp.style.color = '#c62828';
+                exp.style.border = '2px solid #ef9a9a';
+            }
+
+            if (currentCase < cases.length - 1) {
+                document.getElementById('next-btn').style.display = 'inline-block';
+            } else {
+                exp.innerText += " 🎖️ TEBRİKLER! Tüm etik vakalarını başarıyla inceledin!";
+                setTimeout(saveEthicsBadge, 1200);
+            }
+        }
+
+        function nextCase() {
+            if (currentCase < cases.length - 1) {
+                currentCase++;
+                loadCase();
+            }
+        }
+
+        function saveEthicsBadge() {
+            const name = prompt("🎉 Tebrikler! 'Etik Dedektifi' Rozeti Kazandın!\nBaşarı Panosunda görünmesi için Adını ve Soyadını yaz:");
+            if (name && name.trim() !== "") {
+                let winners = JSON.parse(localStorage.getItem('ai_ethics_winners')) || [];
+                winners.push({ name: name.trim() });
+                localStorage.setItem('ai_ethics_winners', JSON.stringify(winners));
+                alert("Harika! İsmin Başarı Panosuna eklendi! 🏆");
+            }
+        }
+
+        loadCase();
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>inomaker - Robotik Hafıza Eşleştirme</title>
+    <style>
+        body {
+            margin: 0; padding: 40px 20px;
+            background-color: #EEC21A;
+            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; overflow-y: auto; position: relative; box-sizing: border-box;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none;
+        }
+        .logo-img {
+            position: absolute; top: 30px; left: 30px; width: 40%; max-width: 220px; height: auto; z-index: 10; cursor: pointer;
+        }
+        .bg-circle { position: absolute; background: rgba(255, 255, 255, 0.2); border-radius: 50%; pointer-events: none; z-index: 0; }
+        .bg-circle-1 { width: 120px; height: 120px; top: 15%; right: 15%; }
+        .bg-circle-2 { width: 90px; height: 90px; bottom: 25%; left: 10%; }
+        .bg-circle-3 { width: 140px; height: 140px; bottom: 8%; right: 5%; background: rgba(255, 255, 255, 0.15); }
+
+        .view {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 2; width: 100%; animation: fadeIn 0.4s ease; flex: 1; 
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .menu-title { color: #2b2b2b; font-size: 2.5rem; margin-bottom: 15px; text-shadow: 2px 2px 0px rgba(255,255,255,0.4); text-align: center; }
+        
+        .score-board {
+            background: white; padding: 10px 25px; border-radius: 20px;
+            font-weight: bold; color: #333; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .grid-container {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+            width: 100%; max-width: 420px; perspective: 1000px; margin-bottom: 20px;
+        }
+        .card {
+            aspect-ratio: 1; background-color: transparent; cursor: pointer;
+            position: relative; transform-style: preserve-3d; transition: transform 0.4s ease;
+        }
+        .card.flipped { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            font-size: 2.8rem; box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        .card-back { background-color: #1c66ed; color: white; border: 4px solid white; font-size: 2rem; }
+        .card-front { background-color: #ffffff; transform: rotateY(180deg); border: 4px solid #1c66ed; }
+
+        .win-message {
+            display: none; flex-direction: column; align-items: center; background: white;
+            padding: 25px 40px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-align: center; animation: fadeIn 0.4s ease;
+        }
+        .win-message h2 { color: #27ae60; font-size: 2.2rem; margin: 0 0 15px 0; }
+        .btn-restart {
+            background-color: #2ec4b6; color: white; border: none; border-radius: 20px;
+            padding: 12px 30px; font-size: 1.3rem; font-weight: bold; cursor: pointer;
+            box-shadow: 0 6px 0 #208b81; transition: all 0.1s;
+        }
+        .btn-restart:active { transform: translateY(6px); box-shadow: 0 0 0 #208b81; }
+
+        .btn-back {
+            margin-top: 10px; background-color: #4a90e2; color: white; border: none;
+            border-radius: 20px; padding: 14px 35px; font-size: 1.4rem; font-weight: bold;
+            cursor: pointer; box-shadow: 0 6px 0 #357abd; transition: all 0.1s;
+        }
+        .btn-back:active { transform: translateY(6px); box-shadow: 0 0 0 #357abd; }
+
+        @media (max-width: 500px) {
+            .grid-container { gap: 8px; max-width: 320px; }
+            .card-face { font-size: 2.2rem; border-radius: 15px; border-width: 3px; }
+            .menu-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo tıklandığında ana sayfaya döner (Pixel Art ile aynı mantık) -->
+    <img src="../logo.png" class="logo-img" alt="inomaker" onclick="window.location.href='../index.html'">
+
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-circle bg-circle-3"></div>
+
+    <div class="view">
+        <h2 class="menu-title">Robotik Hafıza Eşleştirme 🤖</h2>
+        <div class="score-board">Hamle: <span id="moves">0</span></div>
+	<div class="score-board">⭐ Puan: <span id="score">0</span></div>
+        <div class="grid-container" id="card-grid"></div>
+
+        <div class="win-message" id="win-message">
+            <h2>Harika İş Çıkardın! 🎉</h2>
+            <p style="font-size: 1.2rem; color: #555; margin-bottom: 20px;">Bütün robotik parçaları başarıyla eşleştirdin!</p>
+            <button class="btn-restart" onclick="startGame()">Tekrar Oyna 🔄</button>
+        </div>
+
+        <div class="header-bar">
+        <button class="btn-back" onclick="location.href='../../index.html#levels'">◀ Menü</button>
+        
+    </div>
+
+
+    <script>
+        const icons = ['🤖', '🧱', '🔌', '⚙️', '💡', '💻', '🔋', '🕹️'];
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let isLocked = false;
+
+        function startGame() {
+            const grid = document.getElementById('card-grid');
+            const winMsg = document.getElementById('win-message');
+            grid.style.display = 'grid';
+            winMsg.style.display = 'none';
+            grid.innerHTML = '';
+            
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            isLocked = false;
+            document.getElementById('moves').innerText = moves;
+
+            let cardIcons = [...icons, ...icons];
+            cardIcons.sort(() => Math.random() - 0.5);
+
+            cardIcons.forEach((icon) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.icon = icon;
+
+                card.innerHTML = `
+                    <div class="card-face card-back">❓</div>
+                    <div class="card-face card-front">${icon}</div>
+                `;
+
+                card.addEventListener('click', () => flipCard(card));
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (isLocked) return;
+            if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+            card.classList.add('flipped');
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                moves++;
+                document.getElementById('moves').innerText = moves;
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            const [card1, card2] = flippedCards;
+            const isMatch = card1.dataset.icon === card2.dataset.icon;
+
+            if (isMatch) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                flippedCards = [];
+                matchedPairs++;
+
+                if (matchedPairs === icons.length) {
+                    setTimeout(() => {
+                        document.getElementById('card-grid').style.display = 'none';
+                        document.getElementById('win-message').style.display = 'flex';
+                    }, 500);
+                }
+            } else {
+                isLocked = true;
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    flippedCards = [];
+                    isLocked = false;
+                }, 900);
+            }
+        }
+
+        startGame();
+    </script>
+</body>
+</html>

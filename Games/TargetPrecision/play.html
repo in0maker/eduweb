@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Hızlı Hedef Vurma ⚡</title>
+    <style>
+        body { margin: 0; background: #1e272e; color: white; font-family: sans-serif; text-align: center; overflow: hidden; user-select: none; }
+        #target { position: absolute; background: #00d2d3; border-radius: 50%; cursor: pointer; transition: width 0.1s, height 0.1s; }
+    </style>
+</head>
+<body>
+    <h2>Küçülmeden Önce Hedeftakine Tıkla! ⚡</h2>
+    <div id="target"></div>
+
+    <script>
+        const target = document.getElementById('target');
+        let size = 80;
+        let timer;
+
+        function moveTarget() {
+            clearTimeout(timer);
+            size = 80;
+            target.style.width = size + 'px';
+            target.style.height = size + 'px';
+            target.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            target.style.top = (Math.random() * (window.innerHeight - 200) + 100) + 'px';
+
+            timer = setInterval(() => {
+                size -= 2;
+                target.style.width = size + 'px';
+                target.style.height = size + 'px';
+                if (size <= 10) { moveTarget(); }
+            }, 50);
+        }
+
+        target.onclick = () => {
+            alert('Harika Refleks! 🎯');
+            moveTarget();
+        };
+
+        moveTarget();
+    </script>
+</body>
+</html>

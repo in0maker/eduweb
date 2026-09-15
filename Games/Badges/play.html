@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rozetlerim & Başarılar - inomaker</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+            background-color: #EEC21A;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; box-sizing: border-box;
+            user-select: none;
+        }
+        .container {
+            background: #ffffff; border-radius: 30px; padding: 25px;
+            max-width: 900px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            text-align: center; margin-top: 10px;
+        }
+        h1 { color: #1c66ed; margin-bottom: 5px; }
+        .subtitle { font-size: 1.1rem; color: #555; margin-bottom: 20px; }
+
+        /* Altın Kahramanlar Pano Tasarımı */
+        .gold-heroes-box {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border: 3px solid #ffb300; border-radius: 20px;
+            padding: 15px; margin-bottom: 25px;
+            box-shadow: 0 6px 15px rgba(255, 179, 0, 0.3);
+        }
+        .gold-heroes-title {
+            color: #b78103; font-size: 1.3rem; font-weight: bold;
+            margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .gold-heroes-list {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+        }
+        .gold-hero-badge {
+            background: #ffffff; border: 2px solid #ffd54f; color: #d84315;
+            padding: 6px 16px; border-radius: 50px; font-weight: bold; font-size: 0.95rem;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 6px;
+        }
+        
+        .badges-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; margin: 20px 0; justify-items: center;
+        }
+
+        .badge-card {
+            background: #fffdf0; border: 3px solid #ffb300; border-radius: 22px;
+            padding: 18px 12px; width: 100%; max-width: 240px;
+            display: flex; flex-direction: column; align-items: center;
+            box-sizing: border-box; transition: transform 0.2s;
+            box-shadow: 0 8px 15px rgba(255,179,0,0.2);
+        }
+        .badge-card:hover { transform: translateY(-5px); }
+
+        .badge-icon { font-size: 3.5rem; margin-bottom: 8px; line-height: 1; }
+        .badge-title { font-size: 1.2rem; font-weight: bold; color: #1a4fcc; margin-bottom: 6px; }
+        .badge-desc { font-size: 0.85rem; color: #666; line-height: 1.3; margin-bottom: 12px; }
+
+        .winners-box {
+            background: #ffffff; border: 2px dashed #ffd54f; border-radius: 12px;
+            width: 100%; padding: 10px; box-sizing: border-box; max-height: 150px;
+            overflow-y: auto; text-align: left; margin-top: auto;
+        }
+        .winners-title { font-size: 0.8rem; font-weight: bold; color: #d84315; margin-bottom: 5px; text-align: center; }
+        
+        .winner-item {
+            font-size: 0.85rem; color: #2e7d32; font-weight: bold; padding: 4px 0;
+            border-bottom: 1px dotted #eee; display: flex; justify-content: space-between; align-items: center;
+        }
+        .no-winners { font-size: 0.8rem; color: #999; text-align: center; font-style: italic; }
+
+        .btn-delete-student {
+            background: #ff5252; color: white; border: none; border-radius: 50%;
+            width: 20px; height: 20px; font-size: 0.75rem; font-weight: bold;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            line-height: 1; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .btn-delete-student:hover { background: #d32f2f; }
+
+        .action-buttons {
+            display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 15px;
+        }
+
+        .btn-home {
+            background: #ff5252; color: white; border: none; padding: 12px 25px;
+            border-radius: 20px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
+            box-shadow: 0 5px 0 #d32f2f;
+        }
+        .btn-home:active { transform: translateY(4px); box-shadow: 0 0 0; }
+
+        .btn-cert {
+            background: #4caf50; color: white; border: none; padding: 12px 25px;
+            border-radius: 20px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
+            box-shadow: 0 5px 0 #2e7d32;
+        }
+        .btn-cert:active { transform: translateY(4px); box-shadow: 0 0 0; }
+
+        .btn-teacher {
+            background: rgba(0,0,0,0.08); color: #555; border: 2px dashed #888;
+            padding: 8px 18px; border-radius: 15px; font-size: 0.85rem; cursor: pointer;
+            font-weight: bold; margin-top: 20px; display: inline-block;
+        }
+        .btn-teacher:hover { background: rgba(0,0,0,0.15); color: #000; }
+
+        .admin-banner {
+            display: none; background: #ffebee; color: #c62828; border: 2px solid #ef5350;
+            border-radius: 12px; padding: 8px 15px; margin-bottom: 15px;
+            font-size: 0.9rem; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🏆 inomaker Başarı Panosu</h1>
+        <div class="subtitle">Oyunları ve etkinlikleri başarıyla tamamlayıp rozet kazanan kahramanlarımız! ⭐</div>
+
+        <div class="admin-banner" id="admin-banner">
+            🔓 Öğretmen Modu Aktif — Silmek istediğiniz öğrencinin yanındaki (✕) butonuna tıklayın.
+        </div>
+
+        <!-- Altın Kahramanlar (Tüm Rozetleri Toplayanlar) -->
+        <div class="gold-heroes-box">
+            <div class="gold-heroes-title">👑 Altın Kahramanlar (Tüm Rozetleri Alanlar) 👑</div>
+            <div class="gold-heroes-list" id="gold-heroes-container">
+                <span style="font-size:0.85rem; color:#777; font-style:italic;">Tüm rozetleri tamamlayan ilk kahraman sen ol!</span>
+            </div>
+        </div>
+
+        <div class="badges-grid">
+            
+            <!-- Prompt Ustası Rozeti -->
+            <div class="badge-card">
+                <div class="badge-icon">✍️</div>
+                <div class="badge-title">Prompt Ustası</div>
+                <div class="badge-desc">Prompt Lab oyununu başarıyla tamamlayanlar</div>
+                <div class="winners-box">
+                    <div class="winners-title">🏅 Kazanan Öğrenciler:</div>
+                    <div id="winners-prompt"></div>
+                </div>
+            </div>
+
+            <!-- AI Etik Dedektifi Rozeti -->
+            <div class="badge-card">
+                <div class="badge-icon">⚖️</div>
+                <div class="badge-title">Etik Dedektifi</div>
+                <div class="badge-desc">AI Etik vakalarını doğru çözenler</div>
+                <div class="winners-box">
+                    <div class="winners-title">🏅 Kazanan Öğrenciler:</div>
+                    <div id="winners-ethics"></div>
+                </div>
+            </div>
+
+            <!-- Kod Mimarı Rozeti -->
+            <div class="badge-card">
+                <div class="badge-icon">🧩</div>
+                <div class="badge-title">Kod Mimarı</div>
+                <div class="badge-desc">Kod Bulmacasını başarıyla çözenler</div>
+                <div class="winners-box">
+                    <div class="winners-title">🏅 Kazanan Öğrenciler:</div>
+                    <div id="winners-blockly"></div>
+                </div>
+            </div>
+
+            <!-- Robotics / Robot Parçaları Rozeti -->
+            <div class="badge-card">
+                <div class="badge-icon">🦾</div>
+                <div class="badge-title">Geleceğin Mühendisi</div>
+                <div class="badge-desc">Robotics & Sensör Bulmacasını çözenler</div>
+                <div class="winners-box">
+                    <div class="winners-title">🏅 Kazanan Öğrenciler:</div>
+                    <div id="winners-robotics"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-home" onclick="window.history.back()">◀ Ana Menüye Dön</button>
+            <button class="btn-cert" onclick="generateCertificate()">🎓 Sertifikamı İndir / Yazdır</button>
+        </div>
+
+        <div>
+            <button class="btn-teacher" onclick="openTeacherPanel()">🔒 Öğretmen Paneli</button>
+        </div>
+    </div>
+
+    <script>
+        let isAdmin = false;
+        const totalBadgeCount = 4;
+
+        function getStudentNames(storageKey) {
+            const winners = JSON.parse(localStorage.getItem(storageKey)) || [];
+            return winners.map(w => typeof w === 'object' ? w.name : w);
+        }
+
+        function renderWinners(storageKey, elementId) {
+            const container = document.getElementById(elementId);
+            const winners = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+            if (winners.length === 0) {
+                container.innerHTML = '<div class="no-winners">Henüz rozet kazanan olmadı. İlk sen ol! 🚀</div>';
+            } else {
+                container.innerHTML = winners.map((w, index) => {
+                    const studentName = typeof w === 'object' ? w.name : w;
+                    return `
+                        <div class="winner-item">
+                            <span>⭐ ${studentName}</span>
+                            ${isAdmin ? `<button class="btn-delete-student" onclick="deleteStudent('${storageKey}', ${index}, '${studentName}')" title="Öğrenciyi Sil">✕</button>` : ''}
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function updateGoldHeroes() {
+            const promptWinners = getStudentNames('prompt_lab_winners');
+            const ethicsWinners = getStudentNames('ai_ethics_winners');
+            const blocklyWinners = getStudentNames('blockly_winners');
+            
+            // Hem robotics_winners hem de sensor_puzzle_winners kontrol edilir
+            const roboticsWinners = [...getStudentNames('robotics_winners'), ...getStudentNames('sensor_puzzle_winners')];
+
+            const badgeCounts = {};
+
+            [...promptWinners, ...ethicsWinners, ...blocklyWinners, ...roboticsWinners].forEach(name => {
+                badgeCounts[name] = (badgeCounts[name] || 0) + 1;
+            });
+
+            const goldHeroes = Object.keys(badgeCounts).filter(name => badgeCounts[name] >= totalBadgeCount);
+            const container = document.getElementById('gold-heroes-container');
+
+            if (goldHeroes.length === 0) {
+                container.innerHTML = '<span style="font-size:0.85rem; color:#777; font-style:italic;">Tüm rozetleri tamamlayan ilk kahraman sen ol!</span>';
+            } else {
+                container.innerHTML = goldHeroes.map(hero => `
+                    <div class="gold-hero-badge">
+                        <span>🌟 ${hero}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function loadAllWinners() {
+            renderWinners('prompt_lab_winners', 'winners-prompt');
+            renderWinners('ai_ethics_winners', 'winners-ethics');
+            renderWinners('blockly_winners', 'winners-blockly');
+            
+            // Robotics klasöründeki veya Sensör bulmacasındaki verileri birleştirip gösterir
+            const roboticsData = [
+                ...(JSON.parse(localStorage.getItem('robotics_winners')) || []),
+                ...(JSON.parse(localStorage.getItem('sensor_puzzle_winners')) || [])
+            ];
+            localStorage.setItem('robotics_winners', JSON.stringify(roboticsData));
+            
+            renderWinners('robotics_winners', 'winners-robotics');
+            updateGoldHeroes();
+        }
+
+        function openTeacherPanel() {
+            const password = prompt("Lütfen Öğretmen Parolasını Girin:");
+            if (password === "1881") {
+                isAdmin = true;
+                document.getElementById('admin-banner').style.display = 'block';
+                loadAllWinners();
+                alert("Öğretmen modu açıldı! Öğrencilerin yanındaki kırmızı (✕) butonuna basarak istediğiniz kişiyi silebilirsiniz.");
+            } else if (password !== null) {
+                alert("Hatalı parola!");
+            }
+        }
+
+        function deleteStudent(storageKey, index, studentName) {
+            if (confirm(`"${studentName}" isimli öğrenciyi bu rozet listesinden silmek istediğinize emin misiniz?`)) {
+                let winners = JSON.parse(localStorage.getItem(storageKey)) || [];
+                winners.splice(index, 1);
+                localStorage.setItem(storageKey, JSON.stringify(winners));
+                
+                // Yedek anahtardan da temizleme
+                if (storageKey === 'robotics_winners') {
+                    let sensorWinners = JSON.parse(localStorage.getItem('sensor_puzzle_winners')) || [];
+                    sensorWinners = sensorWinners.filter(w => (typeof w === 'object' ? w.name : w) !== studentName);
+                    localStorage.setItem('sensor_puzzle_winners', JSON.stringify(sensorWinners));
+                }
+
+                loadAllWinners();
+            }
+        }
+
+        function generateCertificate() {
+            let studentName = prompt("Sertifika üzerindeki öğrenci adını girin:", "Öğrenci Adı");
+            if (!studentName || studentName.trim() === "") return;
+
+            const certWindow = window.open('', '_blank', 'width=900,height=650');
+            const today = new Date().toLocaleDateString('tr-TR');
+
+            const certHTML = `
+                <!DOCTYPE html>
+                <html lang="tr">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Başarı Sertifikası - ${studentName}</title>
+                    <style>
+                        body {
+                            margin: 0; padding: 0; background: #f0f0f0;
+                            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+                            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+                        }
+                        .cert-border {
+                            width: 800px; height: 550px; background: #ffffff;
+                            border: 12px solid #1c66ed; outline: 4px dashed #ffb300; outline-offset: -16px;
+                            border-radius: 20px; padding: 40px; box-sizing: border-box;
+                            text-align: center; position: relative;
+                        }
+                        .cert-header { font-size: 2.2rem; color: #1c66ed; font-weight: bold; margin-bottom: 10px; }
+                        .cert-sub { font-size: 1.2rem; color: #d84315; font-weight: bold; }
+                        .cert-body { margin-top: 30px; font-size: 1.1rem; color: #333; line-height: 1.6; }
+                        .student-title { font-size: 2.4rem; color: #ffb300; text-decoration: underline; margin: 15px 0; font-weight: bold; }
+                        .badge-icons { font-size: 2.5rem; margin: 20px 0; }
+                        .cert-footer {
+                            margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end;
+                            padding: 0 30px; font-weight: bold; color: #555;
+                        }
+                        .signature { border-top: 2px solid #555; padding-top: 5px; width: 180px; text-align: center; }
+                        @media print {
+                            body { background: white; }
+                            .cert-border { box-shadow: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="cert-border">
+                        <div class="cert-header">🚀 inomaker Kodlama & AI Atölyesi</div>
+                        <div class="cert-sub">🏆 DİJİTAL BAŞARI SERTİFİKASI 🏆</div>
+                        
+                        <div class="cert-body">
+                            Bu belge, geleceğin teknolojilerine yön verme yolunda gösterdiği üstün başarıdan dolayı:
+                            <div class="student-title">${studentName}</div>
+                            adlı öğrencimize verilmiştir.
+                        </div>
+
+                        <div class="badge-icons">✍️ ⚖️ 🧩 🦾</div>
+
+                        <div class="cert-footer">
+                            <div>Tarih: ${today}</div>
+                            <div class="signature">Atölye Eğitmeni<br><b>inomaker</b></div>
+                        </div>
+                    </div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                        }
+                    <\/script>
+                </body>
+                </html>
+            `;
+
+            certWindow.document.write(certHTML);
+            certWindow.document.close();
+        }
+
+        loadAllWinners();
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>inomaker - Pixel Art Atölyesi</title>
+
+    <style>
+        body {
+            margin: 0; padding: 40px 20px;
+            background-color: #EEC21A;
+            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; overflow-y: auto; position: relative; box-sizing: border-box;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none;
+        }
+        .logo-img {
+            position: absolute; top: 30px; left: 30px; width: 40%; max-width: 220px; height: auto; z-index: 10; cursor: pointer;
+        }
+        .bg-circle { position: absolute; background: rgba(255, 255, 255, 0.2); border-radius: 50%; pointer-events: none; z-index: 0; }
+        .bg-circle-1 { width: 120px; height: 120px; top: 15%; right: 15%; }
+        .bg-circle-2 { width: 90px; height: 90px; bottom: 25%; left: 10%; }
+        .bg-circle-3 { width: 140px; height: 140px; bottom: 8%; right: 5%; background: rgba(255, 255, 255, 0.15); }
+
+        .view {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 2; width: 100%; animation: fadeIn 0.4s ease; flex: 1; 
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .menu-title { color: #2b2b2b; font-size: 2.8rem; margin-bottom: 20px; text-shadow: 2px 2px 0px rgba(255,255,255,0.4); text-align: center; }
+
+        .pixel-workspace {
+            background: white; border-radius: 30px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            display: flex; flex-direction: column; align-items: center; max-width: 500px; width: 100%; box-sizing: border-box;
+        }
+        .palette {
+            display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; justify-content: center;
+        }
+        .color-btn {
+            width: 35px; height: 35px; border-radius: 50%; border: 3px solid #ddd; cursor: pointer; transition: transform 0.1s;
+        }
+        .color-btn.selected { transform: scale(1.2); border-color: #1c66ed; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+        
+        .pixel-grid {
+            display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; background: #ddd; padding: 5px; border-radius: 10px; width: 320px; height: 320px;
+        }
+        .pixel {
+            background: white; width: 100%; aspect-ratio: 1; cursor: pointer; border-radius: 2px;
+        }
+        
+        .pixel-tools {
+            display: flex; gap: 15px; margin-top: 15px; width: 100%; justify-content: center;
+        }
+        .btn-tool {
+            background-color: #ff5252; color: white; border: none; border-radius: 15px; padding: 10px 25px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 0 #d32f2f; font-size: 1rem;
+        }
+        .btn-tool:active { transform: translateY(4px); box-shadow: 0 0 0 #d32f2f; }
+
+        .btn-back {
+            margin-top: 20px; background-color: #4a90e2; color: white; border: none;
+            border-radius: 20px; padding: 14px 35px; font-size: 1.4rem; font-weight: bold;
+            cursor: pointer; box-shadow: 0 6px 0 #357abd; transition: all 0.1s;
+        }
+        .btn-back:active { transform: translateY(6px); box-shadow: 0 0 0 #357abd; }
+
+        @media (max-width: 768px) {
+            body { padding: 15px 10px; }
+            .logo-img { top: 15px; left: 15px; width: 32%; }
+            .menu-title { font-size: 2rem; margin-bottom: 15px; }
+            .pixel-grid { width: 280px; height: 280px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo tıklandığında ana sayfaya döner (klasör konumuna göre ayarlandı) -->
+    <img src="../../logo.png" class="logo-img" alt="inomaker" onclick="window.location.href='../../index.html'">
+
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-circle bg-circle-3"></div>
+
+    <div class="view">
+        <h2 class="menu-title">Pixel Art Atölyesi 🎨</h2>
+        <div class="pixel-workspace">
+            <div class="palette" id="colorPalette"></div>
+            <div class="pixel-grid" id="pixelGrid"></div>
+            <div class="pixel-tools">
+                <button class="btn-tool" onclick="clearGrid()">Hepsini Sil 🧹</button>
+            </div>
+        </div>
+        <!-- Ana sayfaya dönüş butonu -->
+        <button class="btn-back" onclick="window.location.href='../../index.html'">◀ Ana Menüye Dön</button>
+    </div>
+
+    <script>
+        let selectedColor = '#ff5252';
+
+        function initPixelArt() {
+            const colors = ['#ff5252', '#ff9800', '#ffeb3b', '#4caf50', '#2196f3', '#9c27b0', '#795548', '#000000', '#ffffff'];
+            const paletteContainer = document.getElementById('colorPalette');
+            paletteContainer.innerHTML = '';
+
+            colors.forEach((color, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'color-btn' + (index === 0 ? ' selected' : '');
+                btn.style.backgroundColor = color;
+                btn.onclick = () => {
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedColor = color;
+                };
+                paletteContainer.appendChild(btn);
+            });
+
+            const gridContainer = document.getElementById('pixelGrid');
+            gridContainer.innerHTML = '';
+            for (let i = 0; i < 144; i++) {
+                const pixel = document.createElement('div');
+                pixel.className = 'pixel';
+                pixel.onclick = () => {
+                    pixel.style.backgroundColor = selectedColor;
+                };
+                gridContainer.appendChild(pixel);
+            }
+        }
+
+        function clearGrid() {
+            document.querySelectorAll('.pixel').forEach(p => p.style.backgroundColor = 'white');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initPixelArt();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>inomaker - Kod Blokları Bulmacası</title>
+    <style>
+        body {
+            margin: 0; padding: 30px 20px;
+            background-color: #EEC21A;
+            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; box-sizing: border-box;
+            user-select: none;
+        }
+        .logo-img {
+            position: absolute; top: 25px; left: 25px; width: 40%; max-width: 180px; height: auto; z-index: 10;
+        }
+        .puzzle-container {
+            background: #ffffff; border-radius: 35px; padding: 25px; width: 100%; max-width: 600px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; box-sizing: border-box;
+            z-index: 2; margin-top: 15px; position: relative;
+        }
+        .header-info {
+            display: flex; justify-content: space-between; width: 100%; margin-bottom: 15px; align-items: center;
+        }
+        .title { color: #2b2b2b; font-size: 1.6rem; margin: 0; }
+        .score-badge {
+            background: #fffae6; border: 2px solid #ffcc00; padding: 6px 14px; border-radius: 15px;
+            font-weight: bold; color: #b38600; font-size: 1rem; display: flex; align-items: center; gap: 5px;
+        }
+        .grid-board {
+            display: grid; grid-template-columns: repeat(4, 65px); grid-template-rows: repeat(4, 65px);
+            gap: 8px; background: #f0f4f8; padding: 12px; border-radius: 20px; margin-bottom: 15px;
+            border: 3px solid #d9e2ec;
+        }
+        .grid-cell {
+            width: 65px; height: 65px; background: #ffffff; border-radius: 12px; display: flex;
+            align-items: center; justify-content: center; font-size: 2rem; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+        .block-palette {
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; width: 100%;
+        }
+        .code-block {
+            background: #4a90e2; color: white; padding: 10px 16px; border-radius: 15px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 5px 0 #357abd; transition: transform 0.1s; font-size: 0.95rem;
+        }
+        .code-block:active { transform: translateY(5px); box-shadow: 0 0 0 #357abd; }
+        .workspace-area {
+            width: 100%; min-height: 65px; background: #f7f9fc; border: 2px dashed #cbd5e1; border-radius: 15px;
+            display: flex; align-items: center; gap: 8px; padding: 10px; overflow-x: auto; margin-bottom: 15px; box-sizing: border-box;
+        }
+        .workspace-item {
+            background: #27ae60; color: white; padding: 8px 12px; border-radius: 12px; font-weight: bold; font-size: 0.85rem;
+            display: flex; align-items: center; gap: 4px; cursor: pointer; box-shadow: 0 3px 0 #1e8449; flex-shrink: 0;
+            animation: popIn 0.2s ease;
+        }
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .puzzle-actions { display: flex; gap: 10px; width: 100%; justify-content: center; }
+        .btn-action {
+            background: #2ec4b6; color: white; border: none; padding: 12px 20px; border-radius: 20px; font-size: 1.05rem;
+            font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 #209b90; transition: all 0.1s; flex: 1; max-width: 160px;
+        }
+        .btn-action:active { transform: translateY(5px); box-shadow: 0 0 0 #209b90; }
+        .btn-clear { background: #ff5252; box-shadow: 0 5px 0 #d32f2f; }
+        .btn-clear:active { box-shadow: 0 0 0 #d32f2f; }
+        .btn-back {
+            margin-top: 20px; background-color: #ff5252; color: white; border: none;
+            border-radius: 20px; padding: 12px 30px; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; box-shadow: 0 5px 0 #d32f2f; transition: all 0.1s; z-index: 2;
+        }
+        .btn-back:active { transform: translateY(5px); box-shadow: 0 0 0 #d32f2f; }
+
+        @media (max-width: 600px) {
+            .grid-board { grid-template-columns: repeat(4, 55px); grid-template-rows: repeat(4, 55px); }
+            .grid-cell { width: 55px; height: 55px; font-size: 1.6rem; }
+            .puzzle-container { padding: 15px; }
+            .title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../../index.html"><img src="../../logo.png" class="logo-img" alt="inomaker"></a>
+
+    <div class="puzzle-container">
+        <div class="header-info">
+            <h2 class="title" id="level-title">Seviye 1 🧩</h2>
+            <div class="score-badge">⭐ <span id="score-val">0</span> Yıldız</div>
+        </div>
+        
+        <div class="grid-board" id="puzzle-grid"></div>
+
+        <div style="font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 4px; align-self: flex-start;">Komut Blokları:</div>
+        <div class="block-palette">
+            <div class="code-block" onclick="addCommand('İleri')">⬆ İleri Git</div>
+            <div class="code-block" onclick="addCommand('Sağa')">➡ Sağa Dön</div>
+            <div class="code-block" onclick="addCommand('Sola')">⬅ Sola Dön</div>
+        </div>
+
+        <div style="font-size: 0.85rem; font-weight: bold; color: #555; margin-bottom: 4px; align-self: flex-start;">Kod Kuyruğun:</div>
+        <div class="workspace-area" id="workspace-area">
+            <span style="color: #94a3b8; font-size: 0.85rem; margin: auto;" id="workspace-placeholder">Blokları buraya ekle...</span>
+        </div>
+
+        <div class="puzzle-actions">
+            <button class="btn-action btn-clear" onclick="resetWorkspace()">Temizle ↺</button>
+            <button class="btn-action" onclick="runPuzzleCode()">Çalıştır! ▶</button>
+        </div>
+    </div>
+
+    <button class="btn-back" onclick="location.href='../../index.html'">◀ Ana Menüye Dön</button>
+
+    <script>
+        let currentLevel = 1;
+        let totalStars = 0;
+        let robotPos = { x: 0, y: 0, dir: 0 };
+        let targetPos = { x: 3, y: 3 };
+        let playerCommands = [];
+
+        // Her seviye için farklı hedef noktaları (oyun çeşitliliği için)
+        const levelTargets = [
+            { x: 3, y: 3 },
+            { x: 3, y: 0 },
+            { x: 0, y: 3 },
+            { x: 2, y: 2 },
+            { x: 3, y: 1 }
+        ];
+
+        function initLevel() {
+            robotPos = { x: 0, y: 0, dir: 0 };
+            playerCommands = [];
+            
+            // Seviyelere göre hedef belirleme (döngüsel olarak devam eder)
+            let targetIndex = (currentLevel - 1) % levelTargets.length;
+            targetPos = levelTargets[targetIndex];
+
+            // Eğer rastgelelik istenirse ileri seviyelerde farklı konumlar da üretilebilir
+            if (currentLevel > levelTargets.length) {
+                targetPos = { 
+                    x: Math.floor(Math.random() * 4), 
+                    y: Math.floor(Math.random() * 4) 
+                };
+                // Başlangıç ile aynı olmasın
+                if(targetPos.x === 0 && targetPos.y === 0) targetPos = { x: 3, y: 3 };
+            }
+
+            document.getElementById('level-title').innerText = `Seviye ${currentLevel} 🧩`;
+            document.getElementById('score-val').innerText = totalStars;
+            renderPuzzleBoard();
+            resetWorkspaceUI();
+            
+            speak(`Seviye ${currentLevel}. Robotu yıldıza ulaştır!`);
+        }
+
+        function renderPuzzleBoard() {
+            const board = document.getElementById('puzzle-grid');
+            board.innerHTML = '';
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    if (r === robotPos.y && c === robotPos.x) {
+                        cell.innerText = '🤖';
+                    } else if (r === targetPos.y && c === targetPos.x) {
+                        cell.innerText = '⭐';
+                    } else {
+                        cell.innerText = '';
+                    }
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function addCommand(cmd) {
+            playerCommands.push(cmd);
+            const ws = document.getElementById('workspace-area');
+            const placeholder = document.getElementById('workspace-placeholder');
+            if (placeholder) placeholder.remove();
+
+            const item = document.createElement('div');
+            item.className = 'workspace-item';
+            item.innerText = cmd === 'İleri' ? '⬆ İleri' : (cmd === 'Sağa' ? '➡ Sağa' : '⬅ Sola');
+            
+            // Üzerine tıklandığında kuyruktan silme özelliği
+            item.onclick = function() {
+                const index = Array.from(ws.children).indexOf(item);
+                if (index > -1) {
+                    playerCommands.splice(index, 1);
+                    item.remove();
+                    if (playerCommands.length === 0) {
+                        ws.innerHTML = '<span style="color: #94a3b8; font-size: 0.85rem; margin: auto;" id="workspace-placeholder">Blokları buraya ekle...</span>';
+                    }
+                }
+            };
+
+            ws.appendChild(item);
+            ws.scrollLeft = ws.scrollWidth;
+        }
+
+        function resetWorkspaceUI() {
+            playerCommands = [];
+            document.getElementById('workspace-area').innerHTML = '<span style="color: #94a3b8; font-size: 0.85rem; margin: auto;" id="workspace-placeholder">Blokları buraya ekle...</span>';
+        }
+
+        function resetWorkspace() {
+            robotPos = { x: 0, y: 0, dir: 0 };
+            resetWorkspaceUI();
+            renderPuzzleBoard();
+            speak("Sıfırlandı.");
+        }
+
+        function runPuzzleCode() {
+            if (playerCommands.length === 0) {
+                speak("Önce çalışma alanına birkaç kod bloğu eklemelisin!");
+                return;
+            }
+
+            let step = 0;
+            let tempX = robotPos.x;
+            let tempY = robotPos.y;
+            let tempDir = robotPos.dir;
+
+            const interval = setInterval(() => {
+                if (step >= playerCommands.length) {
+                    clearInterval(interval);
+                    if (tempX === targetPos.x && tempY === targetPos.y) {
+                        totalStars += 1;
+                        document.getElementById('score-val').innerText = totalStars;
+                        speak(`Tebrikler! ${currentLevel}. seviyeyi başarıyla tamamladın! Harikasın!`);
+                        
+                        setTimeout(() => {
+                            currentLevel++;
+                            initLevel();
+                        }, 2000);
+                    } else {
+                        speak("Hmm, robot hedefe ulaşamadı. Tekrar dene!");
+                        setTimeout(() => {
+                            robotPos = { x: 0, y: 0, dir: 0 };
+                            renderPuzzleBoard();
+                        }, 1000);
+                    }
+                    return;
+                }
+
+                const cmd = playerCommands[step];
+                if (cmd === 'İleri') {
+                    if (tempDir === 0) tempX = Math.min(3, tempX + 1);
+                    else if (tempDir === 1) tempY = Math.min(3, tempY + 1);
+                    else if (tempDir === 2) tempX = Math.max(0, tempX - 1);
+                    else if (tempDir === 3) tempY = Math.max(0, tempY - 1);
+                } else if (cmd === 'Sağa') {
+                    tempDir = (tempDir + 1) % 4;
+                } else if (cmd === 'Sola') {
+                    tempDir = (tempDir + 3) % 4;
+                }
+
+                robotPos = { x: tempX, y: tempY, dir: tempDir };
+                renderPuzzleBoard();
+                step++;
+            }, 500);
+        }
+
+        function speak(text) {
+            if (!window.speechSynthesis) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'tr-TR';
+            utterance.pitch = 1.2;
+            utterance.rate = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        window.onload = initLevel;
+    </script>
+</body>
+</html>

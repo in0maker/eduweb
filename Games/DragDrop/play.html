@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sürükle & Bırak 📦</title>
+    <style>
+        body { margin: 0; padding: 20px; background: #f0f3f6; font-family: sans-serif; text-align: center; user-select: none; }
+        .container { display: flex; justify-content: space-around; margin-top: 50px; }
+        .box-container { display: flex; gap: 20px; }
+        .draggable { width: 80px; height: 80px; background: #3498db; color: white; border-radius: 15px; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: grab; }
+        .target-box { width: 100px; height: 100px; border: 3px dashed #7f8c8d; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; color: #7f8c8d; }
+        .target-box.hovered { background: #e8f8f5; border-color: #2ecc71; }
+    </style>
+</head>
+<body>
+    <h2>Eşyaları Doğru Kutulara Sürükle! 📦</h2>
+    <div class="container">
+        <div class="box-container" id="sources">
+            <div class="draggable" draggable="true" id="item-apple" data-type="fruit">🍎</div>
+            <div class="draggable" draggable="true" id="item-car" data-type="vehicle">🚗</div>
+            <div class="draggable" draggable="true" id="item-cat" data-type="animal">🐱</div>
+        </div>
+        <div class="box-container">
+            <div class="target-box" data-accept="fruit">Meyve</div>
+            <div class="target-box" data-accept="vehicle">Araç</div>
+            <div class="target-box" data-accept="animal">Hayvan</div>
+        </div>
+    </div>
+    <br><br><button onclick="location.href='../../index.html#levels'">Menü</button>
+
+    <script>
+        let placed = 0;
+        document.querySelectorAll('.draggable').forEach(elem => {
+            elem.addEventListener('dragstart', e => { e.dataTransfer.setData('text', e.target.id); });
+        });
+
+        document.querySelectorAll('.target-box').forEach(box => {
+            box.addEventListener('dragover', e => { e.preventDefault(); box.classList.add('hovered'); });
+            box.addEventListener('dragleave', () => box.classList.remove('hovered'));
+            box.addEventListener('drop', e => {
+                e.preventDefault();
+                box.classList.remove('hovered');
+                const id = e.dataTransfer.getData('text');
+                const draggable = document.getElementById(id);
+                if (draggable && draggable.dataset.type === box.dataset.accept) {
+                    box.appendChild(draggable);
+                    draggable.draggable = false;
+                    placed++;
+                    if(placed === 3) alert('Harika! Tüm eşyaları doğru yerleştirdin! 🎉');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

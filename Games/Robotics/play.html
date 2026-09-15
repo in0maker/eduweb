@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geleceğin Mühendisi - inomaker</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+            background-color: #EEC21A;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; box-sizing: border-box;
+        }
+        .container {
+            background: #ffffff; border-radius: 30px; padding: 25px;
+            max-width: 680px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            text-align: center; margin-top: 10px;
+        }
+        h1 { color: #1c66ed; margin-bottom: 5px; }
+        .score-board { font-size: 1.1rem; font-weight: bold; color: #555; margin-bottom: 15px; }
+        .scenario-card {
+            background: #eef2ff; border: 2px solid #c7d2fe;
+            border-radius: 20px; padding: 20px; margin: 15px 0; text-align: left;
+        }
+        .scenario-title { font-size: 1.25rem; font-weight: bold; color: #3730a3; margin-bottom: 8px; }
+        .scenario-text { font-size: 1.05rem; line-height: 1.4; color: #1e1b4b; margin-bottom: 15px; }
+        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .choice-btn {
+            background: #ffffff; border: 2px solid #a5b4fc; border-radius: 15px;
+            padding: 12px; font-size: 1rem; cursor: pointer; font-family: inherit;
+            font-weight: bold; color: #312e81; text-align: left; transition: all 0.2s; line-height: 1.3;
+        }
+        .choice-btn:hover { background: #e0e7ff; }
+        .explanation {
+            margin-top: 15px; padding: 15px; border-radius: 12px;
+            font-weight: bold; display: none; text-align: left; line-height: 1.4; font-size: 1rem;
+        }
+        .btn-action {
+            background: #27ae60; color: white; border: none; padding: 12px 25px;
+            border-radius: 20px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
+            box-shadow: 0 5px 0 #1e8449; margin-top: 10px; display: none; margin-right: 10px;
+        }
+        .btn-home {
+            background: #ff5252; color: white; border: none; padding: 12px 25px;
+            border-radius: 20px; font-size: 1.1rem; cursor: pointer; font-weight: bold;
+            box-shadow: 0 5px 0 #d32f2f; margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🦾 Geleceğin Mühendisi</h1>
+        <p>Robotunun görevleri tamamlaması için hangi sensör veya donanımı kullanması gerektiğini seç!</p>
+
+        <div class="score-board">Görev: <span id="task-num">1</span>/5</div>
+
+        <div class="scenario-card">
+            <div class="scenario-title" id="scenario-title">Yükleniyor...</div>
+            <div class="scenario-text" id="scenario-text">...</div>
+            
+            <div class="options-grid" id="options-grid"></div>
+
+            <div class="explanation" id="exp-box"></div>
+        </div>
+
+        <div style="display:flex; justify-content:center; align-items:center;">
+            <button class="btn-action" id="next-btn" onclick="nextTask()">Sonraki Görev ▶</button>
+            <button class="btn-home" onclick="window.history.back()">◀ Ana Menüye Dön</button>
+        </div>
+    </div>
+
+    <script>
+        const tasks = [
+            {
+                title: "🤖 Görev 1: Engelden Kaçan Otonom Araç",
+                text: "Tasarladığın gezgin robotun odadaki duvarlara ve engellere çarpmadan ilerlemesi gerekiyor. Robotun önündeki engellerin mesafesini ölçmek için hangi sensörü eklemelisin?",
+                options: [
+                    { text: "🔊 Ultrasonik Mesafe Sensörü", isCorrect: true, exp: "🎉 Harika Seçim! Ultrasonik sensör ses dalgaları gönderip geri dönme süresini hesaplayarak engellerle arasındaki mesafeyi mükemmel şekilde ölçer." },
+                    { text: "🌡️ Sıcaklık ve Nem Sensörü", isCorrect: false, exp: "❌ Hatalı! Sıcaklık sensörü ortamın ısısını ölçer, engelleri tespit edemez." },
+                    { text: "💡 Işık Sensörü (LDR)", isCorrect: false, exp: "❌ Hatalı! Işık sensörü ortamdaki parlaklığı ölçer, engel mesafesini gösteremez." }
+                ]
+            },
+            {
+                title: "🤖 Görev 2: Çizgi İzleyen Akıllı Araç",
+                text: "Fabrikada ürün taşıyan robotun yerdeki siyah çizgiyi takip ederek hedefe ulaşması gerekiyor. Robotun zemin rengini ayırt etmesi için hangi bileşeni kullanmalısın?",
+                options: [
+                    { text: "🔊 Buzzer (Ses Çıkarıcı)", isCorrect: false, exp: "❌ Hatalı! Buzzer sadece sesli uyarı verir." },
+                    { text: "👁️ Kızılötesi (IR) Çizgi / Renk Sensörü", isCorrect: true, exp: "🎉 Mükemmel! IR sensörler siyah ve beyaz yüzeylerin ışık yansıtma farkını algılayarak robotun çizgide kalmasını sağlar." },
+                    { text: "🔘 Servo Motor", isCorrect: false, exp: "❌ Hatalı! Servo motor hareket sağlar ancak zemini algılayamaz." }
+                ]
+            },
+            {
+                title: "🤖 Görev 3: Otomatik Gece Lambası Sistemi",
+                text: "Hava karardığında otomatik olarak yanan, gündüz güneş açtığında ise sönen akıllı bir sokak lambası projesi yapıyorsun. Ortamdaki ışık miktarını ölçmek için ne kullanmalısın?",
+                options: [
+                    { text: "☀️ Işık Sensörü (LDR)", isCorrect: true, exp: "🎉 Doğru! LDR (Fotodirenç), üzerine düşen ışık miktarına göre direnç değiştirerek ortamın aydınlık mı yoksa karanlık mı olduğunu anlar." },
+                    { text: "🎤 Ses Sensörü", isCorrect: false, exp: "❌ Hatalı! Ses sensörü ortamdaki gürültüyü veya alkış sesini dinler." },
+                    { text: "🚨 Servo Motor", isCorrect: false, exp: "❌ Hatalı! Motor hareket üretir, ışığı algılayamaz." }
+                ]
+            },
+            {
+                title: "🤖 Görev 4: Otomatik Bariyer Sistemi",
+                text: "Otopark girişine gelen araçlar için bir bariyer kapısı tasarlıyorsun. Araç yaklaştığında bariyer kolunu 90 derece yukarı kaldıracak hassas açı kontrolü yapan bileşen hangisidir?",
+                options: [
+                    { text: "⚙️ Servo Motor", isCorrect: true, exp: "🎉 Harika! Servo motorlar verilen açı komutuna (örn: 0° ile 90°) göre tam istenen pozisyona dönebilen motorlardır." },
+                    { text: "🔴 Kırmızı LED", isCorrect: false, exp: "❌ Hatalı! LED sadece ışık verir, mekanik bir kaldırma hareketi yapamaz." },
+                    { text: "🌡️ Sıcaklık Sensörü", isCorrect: false, exp: "❌ Hatalı! Sıcaklık sensörü sadece ısı değerini okur." }
+                ]
+            },
+            {
+                title: "🤖 Görev 5: Akıllı Yangın İhbar Robotu",
+                text: "Atölyede olası bir yangın durumunda alevleri algılayıp uyarı verecek bir güvenlik robotu geliştiriyorsun. Alev ışığını ve sıcaklık değişimini tespit etmek için ana sensörün ne olmalıdır?",
+                options: [
+                    { text: "🔥 Alev (Flame) & Sıcaklık Sensörü", isCorrect: true, exp: "🎉 Tebrikler! Alev sensörleri yangından yayılan kızılötesi ışımayı algılayarak anında alarm durumuna geçer." },
+                    { text: "🔊 Ultrasonik Mesafe Sensörü", isCorrect: false, exp: "❌ Hatalı! Mesafe sensörü alevi algılayamaz, sadece cisimlerin yakınlığını ölçer." },
+                    { text: "🔘 Potansiyometre", isCorrect: false, exp: "❌ Hatalı! Potansiyometre manuel olarak çevrilen bir ayar düğmesidir." }
+                ]
+            }
+        ];
+
+        let currentTask = 0;
+        let taskAnswered = false;
+
+        function loadTask() {
+            taskAnswered = false;
+            const t = tasks[currentTask];
+            document.getElementById('task-num').innerText = currentTask + 1;
+            document.getElementById('scenario-title').innerText = t.title;
+            document.getElementById('scenario-text').innerText = t.text;
+            
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+
+            const exp = document.getElementById('exp-box');
+            exp.style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+
+            t.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(opt);
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectOption(opt) {
+            if (taskAnswered) return;
+            taskAnswered = true;
+
+            const exp = document.getElementById('exp-box');
+            exp.style.display = 'block';
+            exp.innerText = opt.exp;
+
+            if (opt.isCorrect) {
+                exp.style.background = '#e8f5e9';
+                exp.style.color = '#2e7d32';
+                exp.style.border = '2px solid #a5d6a7';
+            } else {
+                exp.style.background = '#ffebee';
+                exp.style.color = '#c62828';
+                exp.style.border = '2px solid #ef9a9a';
+            }
+
+            if (currentTask < tasks.length - 1) {
+                document.getElementById('next-btn').style.display = 'inline-block';
+            } else {
+                exp.innerText += " 🏆 TEBRİKLER! Tüm mühendislik görevlerini tamamladın!";
+                setTimeout(saveRoboticsBadge, 1200);
+            }
+        }
+
+        function nextTask() {
+            if (currentTask < tasks.length - 1) {
+                currentTask++;
+                loadTask();
+            }
+        }
+
+        function saveRoboticsBadge() {
+            const name = prompt("🎉 Tebrikler! 'Geleceğin Mühendisi' Rozeti Kazandın!\nBaşarı Panosunda görünmesi için Adını ve Soyadını yaz:");
+            if (name && name.trim() !== "") {
+                let winners = JSON.parse(localStorage.getItem('robotics_winners')) || [];
+                winners.push({ name: name.trim() });
+                localStorage.setItem('robotics_winners', JSON.stringify(winners));
+                alert("Harika! İsmin Başarı Panosuna eklendi! 🏆");
+            }
+        }
+
+        loadTask();
+    </script>
+</body>
+</html>

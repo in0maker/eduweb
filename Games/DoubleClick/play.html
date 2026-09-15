@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çift Tık Balon Patlatma 🎈</title>
+    <style>
+        body { margin: 0; background: #87CEEB; font-family: sans-serif; text-align: center; overflow: hidden; user-select: none; }
+        .balloon { position: absolute; width: 70px; height: 85px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: bold; }
+        .balloon::after { content: "▲"; position: absolute; bottom: -8px; font-size: 10px; color: inherit; }
+        #hud { position: fixed; bottom: 0; width: 100%; height: 60px; background: white; display: flex; justify-content: space-around; align-items: center; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <div id="hud">
+        <div>Patlatılan: <span id="score">0</span> / 10 (Çift Tıkla!)</div>
+	<button onclick="location.href='../../index.html#levels'">Menü</button>
+    </div>
+
+    <script>
+        let score = 0;
+        const colors = ['#FF5722', '#E91E63', '#9C27B0', '#2196F3', '#4CAF50'];
+
+        function spawnBalloon() {
+            if (score >= 10) { alert('Tebrikler! Çift tıklama ustası oldun! 🎉'); return; }
+            const b = document.createElement('div');
+            b.className = 'balloon';
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            b.style.background = color;
+            b.style.color = color;
+            b.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+            b.style.top = window.innerHeight + 'px';
+
+            let speed = Math.random() * 2 + 1.5;
+            let move = setInterval(() => {
+                let top = parseFloat(b.style.top);
+                if (top < -100) { clearInterval(move); b.remove(); spawnBalloon(); }
+                else { b.style.top = (top - speed) + 'px'; }
+            }, 16);
+
+            b.ondblclick = () => {
+                clearInterval(move);
+                b.style.transform = 'scale(1.4)';
+                b.style.opacity = '0';
+                setTimeout(() => { b.remove(); }, 150);
+                score++;
+                document.getElementById('score').innerText = score;
+                spawnBalloon();
+            };
+
+            document.body.appendChild(b);
+        }
+
+        for (let i = 0; i < 3; i++) setTimeout(spawnBalloon, i * 1000);
+    </script>
+</body>
+</html>

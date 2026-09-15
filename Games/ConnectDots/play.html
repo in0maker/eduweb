@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Nokta Birleştirme 1️⃣2️⃣3️⃣</title>
+    <style>
+        body { margin: 0; background: #f39c12; color: white; font-family: sans-serif; text-align: center; user-select: none; }
+        #canvas { background: white; border-radius: 15px; margin-top: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Noktalara Sırasıyla Tıkla! (1 -> 2 -> 3 -> 4)</h2>
+    <canvas id="canvas" width="500" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const dots = [
+            {x: 100, y: 100, id: 1}, {x: 400, y: 100, id: 2},
+            {x: 400, y: 300, id: 3}, {x: 100, y: 300, id: 4}
+        ];
+        let currentDot = 1;
+
+        function draw() {
+            ctx.clearRect(0,0,500,400);
+            dots.forEach(d => {
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, 20, 0, Math.PI * 2);
+                ctx.fillStyle = d.id < currentDot ? '#2ecc71' : '#e74c3c';
+                ctx.fill();
+                ctx.fillStyle = 'white';
+                ctx.font = '20px Arial';
+                ctx.fillText(d.id, d.x - 6, d.y + 7);
+            });
+        }
+
+        canvas.onclick = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const target = dots.find(d => d.id === currentDot);
+            if (target && Math.hypot(target.x - x, target.y - y) < 25) {
+                currentDot++;
+                draw();
+                if (currentDot > dots.length) {
+                    alert('Şekil Tamamlandı! Harika Hassasiyet! 🎉');
+                    currentDot = 1;
+                    draw();
+                }
+            }
+        };
+        draw();
+    </script>
+</body>
+</html>
