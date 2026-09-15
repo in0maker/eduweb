@@ -6,127 +6,208 @@
     <title>inomaker - Eğitim Portalı</title>
 
     <style>
-        /* Genel Sayfa Ayarları */
         body {
-            margin: 0; padding: 40px 20px;
+            margin: 0; 
+            padding: 40px 20px;
             background-color: #EEC21A;
             font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
             min-height: 100vh; 
-            overflow-y: auto;
-            position: relative;
+            overflow-y: auto; 
+            position: relative; 
             box-sizing: border-box;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation; 
+            -webkit-tap-highlight-color: transparent; 
             user-select: none;
         }
 
-        /* Sol Üst Köşe Marka Logosu */
         .logo-img {
             position: absolute; 
             top: 30px; 
             left: 30px; 
             width: 40%; 
             max-width: 220px; 
-            height: auto;
+            height: auto; 
             z-index: 10;
         }
 
-        /* Arka Plan Dekorasyonları */
-        .bg-circle { position: absolute; background: rgba(255, 255, 255, 0.2); border-radius: 50%; pointer-events: none; z-index: 0; }
+        .bg-circle { 
+            position: absolute; 
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 50%; 
+            pointer-events: none; 
+            z-index: 0; 
+        }
         .bg-circle-1 { width: 120px; height: 120px; top: 15%; right: 15%; }
         .bg-circle-2 { width: 90px; height: 90px; bottom: 25%; left: 10%; }
         .bg-circle-3 { width: 140px; height: 140px; bottom: 8%; right: 5%; background: rgba(255, 255, 255, 0.15); }
 
-        /* Ekran Görünümleri */
         .view {
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 2; width: 100%; animation: fadeIn 0.4s ease;
+            display: none; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            z-index: 2; 
+            width: 100%; 
+            animation: fadeIn 0.4s ease; 
             flex: 1; 
         }
         .view.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: scale(0.95); } 
+            to { opacity: 1; transform: scale(1); } 
+        }
 
-        /* --- GİRİŞ EKRANI STİLLERİ --- */
         .speech-bubble {
-            background-color: #fffdf6; border-radius: 35px; padding: 20px 45px;
-            font-size: 1.5rem; font-weight: bold; color: #2b2b2b; text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1); position: relative; margin-bottom: 25px;
-            max-width: 700px;
-            animation: floatAnim 3s ease-in-out infinite;
+            background-color: #fffdf6; 
+            border-radius: 35px; 
+            padding: 20px 45px;
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            color: #2b2b2b; 
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
+            position: relative; 
+            margin-bottom: 25px;
+            max-width: 700px; 
+            animation: floatAnim 3s ease-in-out infinite; 
             cursor: pointer;
         }
         .speech-bubble::after {
-            content: ''; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
-            border-width: 20px 20px 0; border-style: solid; border-color: #fffdf6 transparent; display: block; width: 0;
+            content: ''; 
+            position: absolute; 
+            bottom: -20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            border-width: 20px 20px 0; 
+            border-style: solid; 
+            border-color: #fffdf6 transparent; 
+            display: block; 
+            width: 0;
         }
 
-        /* Atölye Açıklama Kartı */
         .about-badge {
-            background: rgba(255, 255, 255, 0.85); padding: 12px 25px; border-radius: 20px;
-            font-size: 1rem; color: #333; text-align: center; margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08); font-weight: bold; max-width: 600px; line-height: 1.4;
+            background: rgba(255, 255, 255, 0.85); 
+            padding: 12px 25px; 
+            border-radius: 20px;
+            font-size: 1rem; 
+            color: #333; 
+            text-align: center; 
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
+            font-weight: bold; 
+            max-width: 600px; 
+            line-height: 1.4;
         }
 
         .character-card {
-            background-color: #ffffff; border-radius: 40px; width: 300px; padding: 30px 20px;
-            display: flex; flex-direction: column; align-items: center; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); margin-bottom: 25px;
-            cursor: pointer; transition: transform 0.2s;
+            background-color: #ffffff; 
+            border-radius: 40px; 
+            width: 300px; 
+            padding: 30px 20px;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); 
+            margin-bottom: 25px;
+            cursor: pointer; 
+            transition: transform 0.2s;
         }
         .character-card:hover { transform: scale(1.03); }
         
         .sparky-avatar {
-            width: 170px; height: 170px; background: radial-gradient(circle at 35% 35%, #5094ff, #1a4fcc);
-            border-radius: 50%; position: relative; display: flex; justify-content: center; align-items: center;
-            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2);
+            width: 170px; 
+            height: 170px; 
+            background: radial-gradient(circle at 35% 35%, #5094ff, #1a4fcc);
+            border-radius: 50%; 
+            position: relative; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2); 
             transition: all 0.3s ease;
         }
-        .sparky-avatar.speaking {
-            animation: pulseAvatar 0.5s ease infinite alternate;
-        }
+        .sparky-avatar.speaking { animation: pulseAvatar 0.5s ease infinite alternate; }
         @keyframes pulseAvatar {
             from { box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2), 0 0 15px #ffee55; }
             to { box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2), 0 0 35px #5094ff; }
         }
 
-        .sparky-avatar::before { content: ''; position: absolute; top: -18px; width: 10px; height: 24px; background-color: #cbdcf7; border-radius: 5px; }
-        .sparky-antenna-glow { position: absolute; top: -28px; width: 18px; height: 18px; background-color: #ffee55; border-radius: 50%; box-shadow: 0 0 20px #ffee55; }
+        .sparky-avatar::before { 
+            content: ''; 
+            position: absolute; 
+            top: -18px; 
+            width: 10px; 
+            height: 24px; 
+            background-color: #cbdcf7; 
+            border-radius: 5px; 
+        }
+        .sparky-antenna-glow { 
+            position: absolute; 
+            top: -28px; 
+            width: 18px; 
+            height: 18px; 
+            background-color: #ffee55; 
+            border-radius: 50%; 
+            box-shadow: 0 0 20px #ffee55; 
+        }
         .sparky-eyes { display: flex; gap: 30px; margin-top: -12px; }
         .eye { width: 36px; height: 36px; background-color: #1a1a1a; border-radius: 50%; position: relative; }
         .eye::before { content: ''; position: absolute; top: 5px; left: 7px; width: 14px; height: 14px; background-color: #ffffff; border-radius: 50%; }
-        .sparky-mouth { position: absolute; bottom: 38px; width: 28px; height: 14px; border-bottom: 5px solid #1a1a1a; border-radius: 0 0 12px 12px; transition: height 0.2s; }
-        .sparky-avatar.speaking .sparky-mouth {
-            height: 20px; border-radius: 50%; background-color: #1a1a1a; border-bottom: none;
+        .sparky-mouth { 
+            position: absolute; 
+            bottom: 38px; 
+            width: 28px; 
+            height: 14px; 
+            border-bottom: 5px solid #1a1a1a; 
+            border-radius: 0 0 12px 12px; 
+            transition: height 0.2s; 
         }
+        .sparky-avatar.speaking .sparky-mouth { height: 20px; border-radius: 50%; background-color: #1a1a1a; border-bottom: none; }
         .character-name { font-size: 2.2rem; color: #1c66ed; margin-top: 20px; font-weight: bold; }
         
         .buttons-row { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; justify-content: center; }
 
         .btn-main {
-            background-color: #ff5252; color: #ffffff; border: none; border-radius: 30px;
-            padding: 16px 35px; font-size: 1.6rem; font-weight: bold; cursor: pointer;
-            box-shadow: 0 8px 0 #d32f2f, 0 15px 20px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px;
+            background-color: #ff5252; 
+            color: #ffffff; 
+            border: none; 
+            border-radius: 30px;
+            padding: 16px 35px; 
+            font-size: 1.6rem; 
+            font-weight: bold; 
+            cursor: pointer;
+            box-shadow: 0 8px 0 #d32f2f, 0 15px 20px rgba(0,0,0,0.2); 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
             transition: all 0.1s;
         }
         .btn-main:active { transform: translateY(8px); box-shadow: 0 0px 0 #1a1a1a; }
 
         .btn-mic {
-            background-color: #4a90e2; color: #ffffff; border: none; border-radius: 50%;
-            width: 65px; height: 65px; font-size: 1.8rem; cursor: pointer;
-            box-shadow: 0 6px 0 #357abd, 0 10px 15px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center;
+            background-color: #4a90e2; 
+            color: #ffffff; 
+            border: none; 
+            border-radius: 50%;
+            width: 65px; 
+            height: 65px; 
+            font-size: 1.8rem; 
+            cursor: pointer;
+            box-shadow: 0 6px 0 #357abd, 0 10px 15px rgba(0,0,0,0.2); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
             transition: all 0.1s;
         }
         .btn-mic:active { transform: translateY(6px); box-shadow: 0 0 0 #357abd; }
         .btn-mic.listening { background-color: #27ae60; box-shadow: 0 6px 0 #1e8449; animation: pulseMic 1s infinite alternate; }
-
-        @keyframes pulseMic {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
-
+        @keyframes pulseMic { from { transform: scale(1); } to { transform: scale(1.1); } }
         @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* --- BÖLÜMLER (MENÜ) EKRANI STİLLERİ --- */
         .menu-title { color: #2b2b2b; font-size: 3.2rem; margin-bottom: 25px; text-shadow: 2px 2px 0px rgba(255,255,255,0.4); text-align: center; }
         
         .levels-grid { 
@@ -136,89 +217,132 @@
             justify-items: center; 
             width: 100%; 
             max-width: 1100px; 
-            padding: 15px;
+            padding: 15px; 
             box-sizing: border-box;
         }
         
         .level-card {
             background-color: #ffffff; 
             border-radius: 30px; 
-            width: 100%;
+            width: 100%; 
             max-width: 220px; 
             aspect-ratio: 1 / 1; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: center;
+            justify-content: center; 
             cursor: pointer; 
             box-shadow: 0 10px 0 #cccccc, 0 15px 20px rgba(0,0,0,0.1); 
-            transition: all 0.1s ease;
-            padding: 15px;
+            transition: all 0.1s ease; 
+            padding: 15px; 
             box-sizing: border-box;
         }
-        
         .level-card:active { transform: translateY(10px); box-shadow: 0 0px 0 #cccccc; }
+        .level-card.featured { border: 3px solid #ff5252; background: #fffcf0; }
+        .level-card.mouse-category { border: 3px solid #27ae60; background: #eafaf1; }
         .level-icon { font-size: 3.5rem; margin-bottom: 10px; text-align: center; line-height: 1; }
         .level-name { font-size: 1.3rem; font-weight: bold; color: #333; text-align: center; line-height: 1.2; padding: 0; margin: 0; }
         
         .btn-back {
-            margin-top: 30px; background-color: #ff5252; color: white; border: none;
-            border-radius: 20px; padding: 14px 35px; font-size: 1.4rem; font-weight: bold;
-            cursor: pointer; box-shadow: 0 6px 0 #d32f2f; transition: all 0.1s;
+            margin-top: 30px; 
+            background-color: #ff5252; 
+            color: white; 
+            border: none;
+            border-radius: 20px; 
+            padding: 14px 35px; 
+            font-size: 1.4rem; 
+            font-weight: bold;
+            cursor: pointer; 
+            box-shadow: 0 6px 0 #d32f2f; 
+            transition: all 0.1s;
         }
         .btn-back:active { transform: translateY(6px); box-shadow: 0 0 0 #d32f2f; }
 
-        /* --- SAĞ ALT KÖŞE CHAT WIDGET STİLLERİ --- */
         .chat-widget-btn {
-            position: fixed; bottom: 25px; right: 25px; background: #1c66ed; color: white;
-            width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.3); z-index: 1000;
-            transition: transform 0.2s; border: 3px solid white;
+            position: fixed; 
+            bottom: 25px; 
+            right: 25px; 
+            background: #1c66ed; 
+            color: white;
+            width: 65px; 
+            height: 65px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 2rem; 
+            cursor: pointer; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
+            z-index: 1000;
+            transition: transform 0.2s; 
+            border: 3px solid white;
         }
         .chat-widget-btn:hover { transform: scale(1.1); }
         .chat-badge {
-            position: absolute; top: -2px; right: -2px; background: #ff5252; color: white;
-            font-size: 0.75rem; font-weight: bold; padding: 3px 7px; border-radius: 10px; border: 2px solid white;
+            position: absolute; 
+            top: -2px; 
+            right: -2px; 
+            background: #ff5252; 
+            color: white;
+            font-size: 0.75rem; 
+            font-weight: bold; 
+            padding: 3px 7px; 
+            border-radius: 10px; 
+            border: 2px solid white;
         }
 
         .chat-window {
-            position: fixed; bottom: 100px; right: 25px; width: 340px; height: 460px;
-            background: #ffffff; border-radius: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-            display: none; flex-direction: column; z-index: 1000; overflow: hidden; border: 3px solid #1c66ed;
+            position: fixed; 
+            bottom: 100px; 
+            right: 25px; 
+            width: 340px; 
+            height: 460px;
+            background: #ffffff; 
+            border-radius: 25px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            display: none; 
+            flex-direction: column; 
+            z-index: 1000; 
+            overflow: hidden; 
+            border: 3px solid #1c66ed;
             animation: slideUp 0.3s ease;
         }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .chat-header {
-            background: #1c66ed; color: white; padding: 15px 20px; font-size: 1.2rem; font-weight: bold;
-            display: flex; justify-content: space-between; align-items: center;
+            background: #1c66ed; 
+            color: white; 
+            padding: 15px 20px; 
+            font-size: 1.2rem; 
+            font-weight: bold;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
         }
         .chat-close { background: none; border: none; color: white; font-size: 1.4rem; cursor: pointer; }
 
         .chat-messages {
-            flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f7f9fc;
+            flex: 1; 
+            padding: 15px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            background: #f7f9fc;
         }
         .msg { max-width: 80%; padding: 10px 14px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; word-break: break-word; }
         .msg.sparky { background: #e3f2fd; color: #1a4fcc; align-self: flex-start; border-bottom-left-radius: 3px; }
         .msg.user { background: #1c66ed; color: white; align-self: flex-end; border-bottom-right-radius: 3px; }
 
-        .chat-input-area {
-            display: flex; padding: 10px; background: white; border-top: 2px solid #eee; gap: 8px;
-        }
-        .chat-input {
-            flex: 1; padding: 10px 15px; border: 2px solid #ddd; border-radius: 20px; outline: none; font-size: 0.95rem;
-        }
+        .chat-input-area { display: flex; padding: 10px; background: white; border-top: 2px solid #eee; gap: 8px; }
+        .chat-input { flex: 1; padding: 10px 15px; border: 2px solid #ddd; border-radius: 20px; outline: none; font-size: 0.95rem; }
         .chat-input:focus { border-color: #1c66ed; }
-        .chat-send {
-            background: #2ec4b6; color: white; border: none; border-radius: 20px; padding: 0 18px; font-weight: bold; cursor: pointer;
-        }
+        .chat-send { background: #2ec4b6; color: white; border: none; border-radius: 20px; padding: 0 18px; font-weight: bold; cursor: pointer; }
         .chat-send:active { transform: scale(0.95); }
 
-        /* MOBİL UYUMU */
         @media (max-width: 768px) {
             body { padding: 15px 10px; }
             .logo-img { top: 15px; left: 15px; width: 32%; }
-            
             .speech-bubble { font-size: 1rem; padding: 12px 18px; margin-bottom: 15px; }
             .about-badge { font-size: 0.85rem; padding: 10px 15px; margin-bottom: 15px; }
             .character-card { width: 220px; padding: 20px 10px; margin-bottom: 15px; }
@@ -232,22 +356,12 @@
             .character-name { font-size: 1.6rem; margin-top: 12px; }
             .btn-main { padding: 14px 25px; font-size: 1.3rem; }
             .btn-mic { width: 55px; height: 55px; font-size: 1.5rem; }
-
             .menu-title { font-size: 2rem; margin-bottom: 20px; }
-            .levels-grid { 
-                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
-                gap: 12px; 
-                padding: 5px;
-            }
-            .level-card { 
-                max-width: 150px;
-                border-radius: 22px; 
-                padding: 10px;
-            }
+            .levels-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; padding: 5px; }
+            .level-card { max-width: 150px; border-radius: 22px; padding: 10px; }
             .level-icon { font-size: 2.6rem; margin-bottom: 6px; }
             .level-name { font-size: 0.95rem; }
             .btn-back { margin-top: 20px; padding: 10px 25px; font-size: 1.1rem; }
-
             .chat-window { width: calc(100vw - 30px); right: 15px; height: 380px; bottom: 90px; }
         }
     </style>
@@ -260,10 +374,10 @@
     <div class="bg-circle bg-circle-2"></div>
     <div class="bg-circle bg-circle-3"></div>
 
+    <!-- KARŞILAMA EKRANI -->
     <div id="view-welcome" class="view active">
         <div id="speech-bubble" class="speech-bubble" onclick="speakSparky()">Selam! Ben Sparky. Kodlama, robotik ve yapay zeka macerasına hazır mısın? 🤖</div>
         
-        <!-- Atölye Eğlenceli Açıklama Yazısı -->
         <div class="about-badge">
             🚀 <strong>inomaker Robotik Kodlama Atölyesi</strong><br>
             Minik eller, dev fikirler ve geleceğin teknolojileri burada buluşuyor! Python'dan yapay zekaya, kendi oyununu tasarla ve teknolojinin kahramanı sen ol! ✨
@@ -280,17 +394,54 @@
 
         <div class="buttons-row">
             <button class="btn-mic" id="btn-mic" onclick="toggleListening()" title="Sesli Konuş">🎤</button>
-            <button class="btn-main" onclick="switchView('view-levels'); speakText('Harika! Şimdi oyun seçme zamanı!');">Başla! ▶</button>
+            <button class="btn-main" onclick="switchView('view-levels'); speakText('Harika! Şimdi etkinlik ve oyun seçme zamanı!');">Başla! ▶</button>
         </div>
     </div>
 
+    <!-- OYUN VE ETKİNLİK MENÜSÜ -->
     <div id="view-levels" class="view">
-        <h2 class="menu-title">Oyun Seç 🎮</h2>
+        <h2 class="menu-title">Etkinlik & Oyun Seç 🎮</h2>
         <div class="levels-grid">
             
+            <!-- YENİ EKLENEN MOUSE BECERİLERİ KATEGORİSİ -->
+            <div class="level-card mouse-category" onclick="switchView('view-mouse-games'); speakText('Mouse becerilerini geliştirecek harika oyunlar burada!');">
+                <div class="level-icon">🖱️⭐</div>
+                <div class="level-name">Mouse Becerileri</div>
+            </div>
+
+            <div class="level-card featured" onclick="location.href='Games/PromptLab/play.html'">
+                <div class="level-icon">✍️🧠</div>
+                <div class="level-name">Prompt Lab</div>
+            </div>
+
+            <div class="level-card featured" onclick="location.href='Games/AIEthics/play.html'">
+                <div class="level-icon">⚖️🤖</div>
+                <div class="level-name">AI Etik Dedektifi</div>
+            </div>
+
+            <div class="level-card featured" onclick="location.href='Games/Robotics/play.html'">
+                <div class="level-icon">🦾⚙️</div>
+                <div class="level-name">Robot Parçaları & Sensör Bulmacası</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/BlocklyPuzzle/play.html'">
+                <div class="level-icon">🧩🤖</div>
+                <div class="level-name">Kod Blokları Bulmacası</div>
+            </div>
+
             <div class="level-card" onclick="location.href='Games/CameraAI/play.html'">
                 <div class="level-icon">🤖📸</div>
                 <div class="level-name">Camera AI</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/memorymatch/play.html'">
+                <div class="level-icon">🧠🤖</div>
+                <div class="level-name">Hafıza Eşleştirme</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/pixel-art/play.html'">
+                <div class="level-icon">🎨🖌️</div>
+                <div class="level-name">Pixel Art Atölyesi</div>
             </div>
 
             <div class="level-card" onclick="location.href='Games/ML/play.html'">
@@ -348,11 +499,75 @@
                 <div class="level-name">Sıfır Atık AI</div>
             </div>
 
+            <div class="level-card" onclick="location.href='Games/Badges/play.html'">
+                <div class="level-icon">🏆🎖️</div>
+                <div class="level-name">Rozetlerim</div>
+            </div>
+
         </div>
         <button class="btn-back" onclick="switchView('view-welcome'); speakText('Ana menüye döndük!');">◀ Geri Dön</button>
     </div>
 
-    <!-- SAĞ ALT KÖŞE SPARKY CHAT WIDGET -->
+    <!-- MOUSE BECERİLERİ ÖZEL MENÜSÜ -->
+    <div id="view-mouse-games" class="view">
+        <h2 class="menu-title">Mouse Eğitimi & Oyunları 🖱️</h2>
+        <div class="levels-grid">
+            
+            <div class="level-card" onclick="location.href='Games/MouseSkill/play.html'">
+                <div class="level-icon">🎯🖱️</div>
+                <div class="level-name">Tıklama Avcısı (Sol Tık)</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/DoubleClick/play.html'">
+                <div class="level-icon">🎈💥</div>
+                <div class="level-name">Çift Tık Balon Patlatma</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/DragDrop/play.html'">
+                <div class="level-icon">📦📦</div>
+                <div class="level-name">Sürükle & Bırak Yapboz</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/Maze/play.html'">
+                <div class="level-icon">🌀📍</div>
+                <div class="level-name">Labirent Takibi (Hover)</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/HiddenObject/play.html'">
+                <div class="level-icon">🔍✨</div>
+                <div class="level-name">Gizli Nesne Bulma</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/RightClick/play.html'">
+                <div class="level-icon">🖱️📜</div>
+                <div class="level-name">Sağ Tık Dedektifi</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/ScrollWheel/play.html'">
+                <div class="level-icon">⚙️📜</div>
+                <div class="level-name">Çarkı Döndür (Scroll)</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/ConnectDots/play.html'">
+                <div class="level-icon">1️⃣2️⃣3️⃣</div>
+                <div class="level-name">Nokta Birleştirme</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/TargetPrecision/play.html'">
+                <div class="level-icon">⚡🎯</div>
+                <div class="level-name">Hızlı Hedef Vurma</div>
+            </div>
+
+            <div class="level-card" onclick="location.href='Games/DragPaint/play.html'">
+                <div class="level-icon">🎨🖌️</div>
+                <div class="level-name">Sürükleyerek Resim Boyama</div>
+            </div>
+
+        </div>
+        <button class="btn-back" onclick="switchView('view-levels'); speakText('Etkinlik menüsüne geri döndük!');">◀ Etkinlik Menüsüne Dön</button>
+    </div>
+
+    <!-- SPARKY CHAT WIDGET -->
     <div class="chat-widget-btn" onclick="toggleChatWindow()">
         🤖
         <div class="chat-badge">AI</div>
@@ -364,7 +579,7 @@
             <button class="chat-close" onclick="toggleChatWindow()">✕</button>
         </div>
         <div class="chat-messages" id="chat-messages">
-            <div class="msg sparky">Selam! Ben Sparky. Kodlama, robotik veya atölyemiz hakkında bana dilediğin soruyu sorabilirsin! 🚀</div>
+            <div class="msg sparky">Selam! Ben Sparky. Kodlama, robotik veya yapay zeka hakkında bana dilediğin soruyu sorabilirsin! 🚀</div>
         </div>
         <div class="chat-input-area">
             <input type="text" id="chat-input" class="chat-input" placeholder="Bir şeyler sor..." onkeypress="handleChatKeyPress(event)">
@@ -379,7 +594,6 @@
             window.scrollTo(0, 0); 
         }
 
-        // --- SPARKY SESLİ İLETİŞİM SİSTEMİ ---
         const synth = window.speechSynthesis;
 
         function speakText(text) {
@@ -395,13 +609,8 @@
             const bubble = document.getElementById('speech-bubble');
             if(bubble) bubble.innerText = text;
 
-            utterance.onstart = () => {
-                if(avatar) avatar.classList.add('speaking');
-            };
-
-            utterance.onend = () => {
-                if(avatar) avatar.classList.remove('speaking');
-            };
+            utterance.onstart = () => { if(avatar) avatar.classList.add('speaking'); };
+            utterance.onend = () => { if(avatar) avatar.classList.remove('speaking'); };
 
             synth.speak(utterance);
         }
@@ -413,11 +622,9 @@
                 "inomaker Atölyesi'ne hoş geldin! Hadi aşağıdan bir oyun seçelim.",
                 "Harika bir gün! Yeni robotik projelerini keşfetmek için sabırsızlanıyorum."
             ];
-            const randomMsg = greetings[Math.floor(Math.random() * greetings.length)];
-            speakText(randomMsg);
+            speakText(greetings[Math.floor(Math.random() * greetings.length)]);
         }
 
-        // --- SESLİ KOMUT (MICROPHONE / SPEECH RECOGNITION) ---
         let recognition;
         let listening = false;
 
@@ -429,7 +636,6 @@
             }
 
             const micBtn = document.getElementById('btn-mic');
-
             if (listening) {
                 if (recognition) recognition.stop();
                 return;
@@ -451,14 +657,20 @@
                 document.getElementById('speech-bubble').innerText = `Dedin ki: "${speechResult}"`;
                 
                 if (speechResult.includes('oyun') || speechResult.includes('başla') || speechResult.includes('menü')) {
-                    speakText("Hemen oyun menüsünü açıyorum!");
+                    speakText("Hemen etkinlik menüsünü açıyorum!");
                     setTimeout(() => switchView('view-levels'), 1500);
-                } else if (speechResult.includes('merhaba') || speechResult.includes('selam')) {
-                    speakText("Sana da merhaba! Bugün kodlama harika geçecek.");
-                } else if (speechResult.includes('flappy') || speechResult.includes('kuş')) {
-                    speakText("Flappy AI oyununu açabilirsin, çok eğlencelidir!");
-                } else if (speechResult.includes('atık') || speechResult.includes('geri dönüşüm')) {
-                    speakText("Sıfır Atık Dedektifi oyununa göz atabilirsin!");
+                } else if (speechResult.includes('mouse') || speechResult.includes('fare')) {
+                    speakText("Mouse becerileri menüsünü açıyorum!");
+                    setTimeout(() => switchView('view-mouse-games'), 1500);
+                } else if (speechResult.includes('sensör') || speechResult.includes('parça') || speechResult.includes('mühendis')) {
+                    speakText("Robot Parçaları ve Sensör Bulmacası'nı açıyorum!");
+                    setTimeout(() => { location.href = 'Games/SensorPuzzle/play.html'; }, 1500);
+                } else if (speechResult.includes('bulmaca') || speechResult.includes('blok')) {
+                    speakText("Kod blokları bulmacasını açıyorum!");
+                    setTimeout(() => { location.href = 'Games/BlocklyPuzzle/play.html'; }, 1500);
+                } else if (speechResult.includes('prompt') || speechResult.includes('komut')) {
+                    speakText("Prompt Laboratuvarı'nı açıyorum!");
+                    setTimeout(() => { location.href = 'Games/PromptLab/play.html'; }, 1500);
                 } else {
                     speakText(`"${speechResult}" dediğini duydum. Harika bir fikir!`);
                 }
@@ -478,21 +690,14 @@
             recognition.start();
         }
 
-        // --- CHAT WIDGET KONTROLLERİ & TOPLU BİLGİ BANKASI ---
         function toggleChatWindow() {
             const win = document.getElementById('chat-window');
-            if (win.style.display === 'flex') {
-                win.style.display = 'none';
-            } else {
-                win.style.display = 'flex';
-                document.getElementById('chat-input').focus();
-            }
+            win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
+            if (win.style.display === 'flex') document.getElementById('chat-input').focus();
         }
 
         function handleChatKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendChatMessage();
-            }
+            if (event.key === 'Enter') sendChatMessage();
         }
 
         function sendChatMessage() {
@@ -501,8 +706,6 @@
             if (!text) return;
 
             const messagesContainer = document.getElementById('chat-messages');
-
-            // Kullanıcı Mesajı Ekle
             const userMsg = document.createElement('div');
             userMsg.className = 'msg user';
             userMsg.innerText = text;
@@ -511,75 +714,52 @@
             inputField.value = '';
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            // Sparky Akıllı Cevap Üretme (Toplu Bilgi Bankasından Kontrol Eder)
             setTimeout(() => {
                 const replyText = getSparkyReply(text.toLowerCase());
-                
                 const sparkyMsg = document.createElement('div');
                 sparkyMsg.className = 'msg sparky';
                 sparkyMsg.innerText = replyText;
                 messagesContainer.appendChild(sparkyMsg);
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                // Sparky yazdığı cevabı sesli de söyler!
                 speakText(replyText);
             }, 600);
         }
 
-        // 🌟 BURAYA İSTEDİĞİN KADAR SORU VE CEVAP EKLEYEBİLİRSİN (TEK TEK DOSYA AÇMANA GEREK YOK)
         function getSparkyReply(query) {
             const knowledgeBase = [
+                {
+                    keywords: ['mouse', 'fare', 'tıklama', 'sürükle'],
+                    answer: "Mouse Becerileri menümüzden sol tık, çift tık, sağ tık ve sürükle-bırak oyunları oynayarak bilgisayar kullanımını hızlandırabilirsin!"
+                },
+                {
+                    keywords: ['prompt', 'istek', 'yönlendirme', 'komut'],
+                    answer: "Prompt mühendisliği, yapay zekaya ne yapması gerektiğini en net ve detaylı şekilde anlatma sanatıdır! Ne kadar net olursan, o kadar harika yanıtlar alırsın."
+                },
+                {
+                    keywords: ['etik', 'önyargı', 'doğru mu', 'yanlış mı', 'bias'],
+                    answer: "Yapay zeka insanlardan öğrenir. Eğer ona hatalı veya eksik bilgi verirsek, taraflı kararlar verebilir. Buna AI Yanlılığı (Bias) denir."
+                },
+                {
+                    keywords: ['sensör', 'parça', 'mühendis'],
+                    answer: "Robot Parçaları & Sensör Bulmacası ile mesafe, ışık ve sıcaklık sensörleri gibi donanımları doğru yerlere yerleştirerek robotunu tamamlayabilirsin!"
+                },
                 {
                     keywords: ['python', 'kod', 'yazılım', 'programlama'],
                     answer: "Python, metin tabanlı harika bir programlama dilidir! Pygame ile oyunlar kodlayabilir ya da yapay zeka modelleri eğitebilirsin."
                 },
                 {
-                    keywords: ['robot', 'quarky', 'mbot', 'arduino', 'donanım'],
-                    answer: "Robotik kodlama harikadır! Sensörleri kullanarak çizgiyi takip eden veya engellerden kaçan robotlar tasarlayabiliriz."
-                },
-                {
-                    keywords: ['3d', 'yazıcı', 'tasarım', 'bambu', 'snapmaker'],
-                    answer: "3D yazıcılarla Bambu Lab ve Snapmaker kullanarak harika modeller, anahtarlıklar ve tablet stantları üretebiliriz!"
-                },
-                {
-                    keywords: ['oyun', 'hangi oyun', 'oyunlar', 'seviye', 'menu'],
-                    answer: "Portalımızda Sıfır Atık AI, Flappy AI, Otonom Araç ve Hikaye Oluşturucu gibi tam 12 harika oyun var. Ana menüden dilediğini seçebilirsin!"
-                },
-                {
-                    keywords: ['yapay zeka', 'ai', 'teachable machine', 'model'],
-                    answer: "Yapay zeka, bilgisayarların insan gibi öğrenmesini sağlayan teknolojidir. Burada kamerayla görüntü ve hareket algılama projeleri yapıyoruz!"
-                },
-                {
-                    keywords: ['inomaker', 'atölye', 'neresi', 'kurs'],
-                    answer: "inomaker Robotik Kodlama Atölyesi; minik ellerin dev fikirlerle buluştuğu, kodlama ve teknolojinin kalbinin attığı yerdir! 🚀"
-                },
-                {
-                    keywords: ['nasılsın', 'naber', 'iyi misin'],
-                    answer: "Süperim! Öğrencilerle birlikte kod yazmayı ve yeni şeyler keşfetmeyi bekliyorum. Sen nasılsın?"
-                },
-                {
-                    keywords: ['merhaba', 'selam', 'hey'],
-                    answer: "Selam! Bugün bana hangi harika soruyu sormak istersin?"
+                    keywords: ['bulmaca', 'blok', 'algoritma', 'kod bloğu'],
+                    answer: "Kod Blokları Bulmacası, mantıksal sıralama yapmanı sağlayan harika bir etkinliktir. Robotu hedefe ulaştırmak için ileri git ve dön bloklarını doğru sırayla dizmelisin!"
                 }
             ];
 
-            // Eşleşen kelimeyi bulma mantığı
-            for (let item of knowledgeBase) {
-                for (let keyword of item.keywords) {
-                    if (query.includes(keyword)) {
-                        return item.answer;
-                    }
+            for (const item of knowledgeBase) {
+                if (item.keywords.some(kw => query.includes(kw))) {
+                    return item.answer;
                 }
             }
 
-            // Eşleşme bulunamazsa rastgele alternatifler
-            const fallbacks = [
-                "Bu gerçekten çok ilginç bir soru! Araştırmaya değer.",
-                "Harika bir konuya değindin! Atölyemizde bunu birlikte test edebiliriz.",
-                "Bunu tam olarak anlayamadım ama kod yazarken yeni şeyler keşfetmek her zaman heyecan vericidir!",
-                "Süper fikir! Bu konuda daha fazla kod bloğu yazmamız gerekebilir."
-            ];
-            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+            return "Bu çok ilginç bir soru! Kodlama, robotik ve yapay zeka dünyasında keşfedecek daha çok şey var. Hadi bir oyun seçip denemeye başlayalım!";
         }
     </script>
 </body>
