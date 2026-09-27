@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Çarkı Döndür ⚙️</title>
+    <style>
+        body { margin: 0; background: #9b59b6; color: white; font-family: sans-serif; text-align: center; height: 100vh; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; user-select: none; }
+        #wheel { font-size: 100px; transition: transform 0.1s; }
+        #progress { font-size: 1.5rem; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Mouse Tekerleğini (Scroll) Yukarı/Aşağı Kaydır! ⚙️</h2>
+    <div id="wheel">⚙️</div>
+    <div id="progress">Yükseklik: <span id="val">0</span> / 100</div>
+
+    <script>
+        let rotation = 0;
+        let score = 0;
+        window.onwheel = (e) => {
+            rotation += e.deltaY * 0.2;
+            document.getElementById('wheel').style.transform = `rotate(${rotation}deg)`;
+            score += Math.abs(e.deltaY * 0.05);
+            if (score > 100) score = 100;
+            document.getElementById('val').innerText = Math.floor(score);
+            if (score >= 100) { alert('Harika! Tekerlek kontrolü tamamlandı! 🎉'); score = 0; }
+        };
+    </script>
+</body>
+</html>

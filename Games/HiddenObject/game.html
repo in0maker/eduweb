@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Gizli Nesne Bulma 🔍</title>
+    <style>
+        body { margin: 0; background: #111; color: white; font-family: sans-serif; text-align: center; overflow: hidden; user-select: none; }
+        #canvas { background: #000; cursor: none; }
+        #hud { position: fixed; top: 10px; width: 100%; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <div id="hud">Fareyi gezdirerek karanlıkta gizlenen 3 yıldızı bul! Bulunan: <span id="found">0</span>/3</div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight - 50;
+
+        let mx = -100, my = -100;
+        let foundCount = 0;
+        const stars = [
+            {x: 150, y: 150, found: false},
+            {x: canvas.width / 2, y: canvas.height / 2, found: false},
+            {x: canvas.width - 150, y: canvas.height - 150, found: false}
+        ];
+
+        canvas.onmousemove = (e) => {
+            mx = e.clientX;
+            my = e.clientY - 40;
+            stars.forEach(s => {
+                if (!s.found && Math.hypot(s.x - mx, s.y - my) < 30) {
+                    s.found = true;
+                    foundCount++;
+                    document.getElementById('found').innerText = foundCount;
+                    if(foundCount === 3) alert('Tüm yıldızları buldun! 🌟');
+                }
+            });
+            draw();
+        };
+
+        function draw() {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Fener ışığı efekti
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(mx, my, 80, 0, Math.PI * 2);
+            ctx.clip();
+
+            ctx.fillStyle = '#222';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            stars.forEach(s => {
+                ctx.font = '30px Arial';
+                ctx.fillText(s.found ? '✅' : '⭐', s.x - 15, s.y + 10);
+            });
+            ctx.restore();
+        }
+    </script>
+</body>
+</html>
