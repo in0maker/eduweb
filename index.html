@@ -1,766 +1,358 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="h-full">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>inomaker - Eğitim Portalı</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inomaker EduWeb - Robotik, Kodlama ve AI Portal</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Poppins (TÜRKÇE DESTEKLİ) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <style>
-        body {
-            margin: 0; 
-            padding: 40px 20px;
-            background-color: #EEC21A;
-            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
-            min-height: 100vh; 
-            overflow-y: auto; 
-            position: relative; 
-            box-sizing: border-box;
-            touch-action: manipulation; 
-            -webkit-tap-highlight-color: transparent; 
-            user-select: none;
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              yellow: '#EEC21A', // Marka Altın Sarı Rengi
+              yellowDark: '#D4A810',
+              purple: '#8302BF',
+              purpleDark: '#5B0185',
+              red: '#FF5252',
+              green: '#27AE60',
+              blue: '#06B6D4',
+              bgLight: '#FFFDF0'
+            }
+          },
+          boxShadow: {
+            'playful': '0 8px 0 0 rgba(0, 0, 0, 0.18)',
+            'playful-pressed': '0 2px 0 0 rgba(0, 0, 0, 0.18)',
+            'gold-glow': '0 0 20px rgba(238, 194, 26, 0.6)'
+          }
         }
+      }
+    }
+  </script>
 
-        .logo-img {
-            position: absolute; 
-            top: 30px; 
-            left: 30px; 
-            width: 40%; 
-            max-width: 220px; 
-            height: auto; 
-            z-index: 10;
-        }
+  <style>
+    body {
+      background-color: #EEC21A;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.3) 2px, transparent 2px);
+      background-size: 24px 24px;
+    }
+    
+    /* Marka Logosu Parıltı Efekti */
+    .logo-gold-card {
+      background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
+      border: 3px solid #EEC21A;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1), 0 0 15px rgba(238, 194, 26, 0.4);
+    }
+    
+    @keyframes floatAnim {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float {
+      animation: floatAnim 3s ease-in-out infinite;
+    }
 
-        .bg-circle { 
-            position: absolute; 
-            background: rgba(255, 255, 255, 0.2); 
-            border-radius: 50%; 
-            pointer-events: none; 
-            z-index: 0; 
-        }
-        .bg-circle-1 { width: 120px; height: 120px; top: 15%; right: 15%; }
-        .bg-circle-2 { width: 90px; height: 90px; bottom: 25%; left: 10%; }
-        .bg-circle-3 { width: 140px; height: 140px; bottom: 8%; right: 5%; background: rgba(255, 255, 255, 0.15); }
-
-        .view {
-            display: none; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
-            z-index: 2; 
-            width: 100%; 
-            animation: fadeIn 0.4s ease; 
-            flex: 1; 
-        }
-        .view.active { display: flex; }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: scale(0.95); } 
-            to { opacity: 1; transform: scale(1); } 
-        }
-
-        .speech-bubble {
-            background-color: #fffdf6; 
-            border-radius: 35px; 
-            padding: 20px 45px;
-            font-size: 1.5rem; 
-            font-weight: bold; 
-            color: #2b2b2b; 
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1); 
-            position: relative; 
-            margin-bottom: 25px;
-            max-width: 700px; 
-            animation: floatAnim 3s ease-in-out infinite; 
-            cursor: pointer;
-        }
-        .speech-bubble::after {
-            content: ''; 
-            position: absolute; 
-            bottom: -20px; 
-            left: 50%; 
-            transform: translateX(-50%);
-            border-width: 20px 20px 0; 
-            border-style: solid; 
-            border-color: #fffdf6 transparent; 
-            display: block; 
-            width: 0;
-        }
-
-        .about-badge {
-            background: rgba(255, 255, 255, 0.85); 
-            padding: 12px 25px; 
-            border-radius: 20px;
-            font-size: 1rem; 
-            color: #333; 
-            text-align: center; 
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
-            font-weight: bold; 
-            max-width: 600px; 
-            line-height: 1.4;
-        }
-
-        .character-card {
-            background-color: #ffffff; 
-            border-radius: 40px; 
-            width: 300px; 
-            padding: 30px 20px;
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); 
-            margin-bottom: 25px;
-            cursor: pointer; 
-            transition: transform 0.2s;
-        }
-        .character-card:hover { transform: scale(1.03); }
-        
-        .sparky-avatar {
-            width: 170px; 
-            height: 170px; 
-            background: radial-gradient(circle at 35% 35%, #5094ff, #1a4fcc);
-            border-radius: 50%; 
-            position: relative; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2); 
-            transition: all 0.3s ease;
-        }
-        .sparky-avatar.speaking { animation: pulseAvatar 0.5s ease infinite alternate; }
-        @keyframes pulseAvatar {
-            from { box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2), 0 0 15px #ffee55; }
-            to { box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2), 0 0 35px #5094ff; }
-        }
-
-        .sparky-avatar::before { 
-            content: ''; 
-            position: absolute; 
-            top: -18px; 
-            width: 10px; 
-            height: 24px; 
-            background-color: #cbdcf7; 
-            border-radius: 5px; 
-        }
-        .sparky-antenna-glow { 
-            position: absolute; 
-            top: -28px; 
-            width: 18px; 
-            height: 18px; 
-            background-color: #ffee55; 
-            border-radius: 50%; 
-            box-shadow: 0 0 20px #ffee55; 
-        }
-        .sparky-eyes { display: flex; gap: 30px; margin-top: -12px; }
-        .eye { width: 36px; height: 36px; background-color: #1a1a1a; border-radius: 50%; position: relative; }
-        .eye::before { content: ''; position: absolute; top: 5px; left: 7px; width: 14px; height: 14px; background-color: #ffffff; border-radius: 50%; }
-        .sparky-mouth { 
-            position: absolute; 
-            bottom: 38px; 
-            width: 28px; 
-            height: 14px; 
-            border-bottom: 5px solid #1a1a1a; 
-            border-radius: 0 0 12px 12px; 
-            transition: height 0.2s; 
-        }
-        .sparky-avatar.speaking .sparky-mouth { height: 20px; border-radius: 50%; background-color: #1a1a1a; border-bottom: none; }
-        .character-name { font-size: 2.2rem; color: #1c66ed; margin-top: 20px; font-weight: bold; }
-        
-        .buttons-row { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; justify-content: center; }
-
-        .btn-main {
-            background-color: #ff5252; 
-            color: #ffffff; 
-            border: none; 
-            border-radius: 30px;
-            padding: 16px 35px; 
-            font-size: 1.6rem; 
-            font-weight: bold; 
-            cursor: pointer;
-            box-shadow: 0 8px 0 #d32f2f, 0 15px 20px rgba(0,0,0,0.2); 
-            display: flex; 
-            align-items: center; 
-            gap: 10px;
-            transition: all 0.1s;
-        }
-        .btn-main:active { transform: translateY(8px); box-shadow: 0 0px 0 #1a1a1a; }
-
-        .btn-mic {
-            background-color: #4a90e2; 
-            color: #ffffff; 
-            border: none; 
-            border-radius: 50%;
-            width: 65px; 
-            height: 65px; 
-            font-size: 1.8rem; 
-            cursor: pointer;
-            box-shadow: 0 6px 0 #357abd, 0 10px 15px rgba(0,0,0,0.2); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            transition: all 0.1s;
-        }
-        .btn-mic:active { transform: translateY(6px); box-shadow: 0 0 0 #357abd; }
-        .btn-mic.listening { background-color: #27ae60; box-shadow: 0 6px 0 #1e8449; animation: pulseMic 1s infinite alternate; }
-        @keyframes pulseMic { from { transform: scale(1); } to { transform: scale(1.1); } }
-        @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-
-        .menu-title { color: #2b2b2b; font-size: 3.2rem; margin-bottom: 25px; text-shadow: 2px 2px 0px rgba(255,255,255,0.4); text-align: center; }
-        
-        .levels-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); 
-            gap: 25px; 
-            justify-items: center; 
-            width: 100%; 
-            max-width: 1100px; 
-            padding: 15px; 
-            box-sizing: border-box;
-        }
-        
-        .level-card {
-            background-color: #ffffff; 
-            border-radius: 30px; 
-            width: 100%; 
-            max-width: 220px; 
-            aspect-ratio: 1 / 1; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            box-shadow: 0 10px 0 #cccccc, 0 15px 20px rgba(0,0,0,0.1); 
-            transition: all 0.1s ease; 
-            padding: 15px; 
-            box-sizing: border-box;
-        }
-        .level-card:active { transform: translateY(10px); box-shadow: 0 0px 0 #cccccc; }
-        .level-card.featured { border: 3px solid #ff5252; background: #fffcf0; }
-        .level-card.mouse-category { border: 3px solid #27ae60; background: #eafaf1; }
-        .level-icon { font-size: 3.5rem; margin-bottom: 10px; text-align: center; line-height: 1; }
-        .level-name { font-size: 1.3rem; font-weight: bold; color: #333; text-align: center; line-height: 1.2; padding: 0; margin: 0; }
-        
-        .btn-back {
-            margin-top: 30px; 
-            background-color: #ff5252; 
-            color: white; 
-            border: none;
-            border-radius: 20px; 
-            padding: 14px 35px; 
-            font-size: 1.4rem; 
-            font-weight: bold;
-            cursor: pointer; 
-            box-shadow: 0 6px 0 #d32f2f; 
-            transition: all 0.1s;
-        }
-        .btn-back:active { transform: translateY(6px); box-shadow: 0 0 0 #d32f2f; }
-
-        .chat-widget-btn {
-            position: fixed; 
-            bottom: 25px; 
-            right: 25px; 
-            background: #1c66ed; 
-            color: white;
-            width: 65px; 
-            height: 65px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-size: 2rem; 
-            cursor: pointer; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
-            z-index: 1000;
-            transition: transform 0.2s; 
-            border: 3px solid white;
-        }
-        .chat-widget-btn:hover { transform: scale(1.1); }
-        .chat-badge {
-            position: absolute; 
-            top: -2px; 
-            right: -2px; 
-            background: #ff5252; 
-            color: white;
-            font-size: 0.75rem; 
-            font-weight: bold; 
-            padding: 3px 7px; 
-            border-radius: 10px; 
-            border: 2px solid white;
-        }
-
-        .chat-window {
-            position: fixed; 
-            bottom: 100px; 
-            right: 25px; 
-            width: 340px; 
-            height: 460px;
-            background: #ffffff; 
-            border-radius: 25px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-            display: none; 
-            flex-direction: column; 
-            z-index: 1000; 
-            overflow: hidden; 
-            border: 3px solid #1c66ed;
-            animation: slideUp 0.3s ease;
-        }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .chat-header {
-            background: #1c66ed; 
-            color: white; 
-            padding: 15px 20px; 
-            font-size: 1.2rem; 
-            font-weight: bold;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-        }
-        .chat-close { background: none; border: none; color: white; font-size: 1.4rem; cursor: pointer; }
-
-        .chat-messages {
-            flex: 1; 
-            padding: 15px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-            background: #f7f9fc;
-        }
-        .msg { max-width: 80%; padding: 10px 14px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; word-break: break-word; }
-        .msg.sparky { background: #e3f2fd; color: #1a4fcc; align-self: flex-start; border-bottom-left-radius: 3px; }
-        .msg.user { background: #1c66ed; color: white; align-self: flex-end; border-bottom-right-radius: 3px; }
-
-        .chat-input-area { display: flex; padding: 10px; background: white; border-top: 2px solid #eee; gap: 8px; }
-        .chat-input { flex: 1; padding: 10px 15px; border: 2px solid #ddd; border-radius: 20px; outline: none; font-size: 0.95rem; }
-        .chat-input:focus { border-color: #1c66ed; }
-        .chat-send { background: #2ec4b6; color: white; border: none; border-radius: 20px; padding: 0 18px; font-weight: bold; cursor: pointer; }
-        .chat-send:active { transform: scale(0.95); }
-
-        @media (max-width: 768px) {
-            body { padding: 15px 10px; }
-            .logo-img { top: 15px; left: 15px; width: 32%; }
-            .speech-bubble { font-size: 1rem; padding: 12px 18px; margin-bottom: 15px; }
-            .about-badge { font-size: 0.85rem; padding: 10px 15px; margin-bottom: 15px; }
-            .character-card { width: 220px; padding: 20px 10px; margin-bottom: 15px; }
-            .sparky-avatar { width: 120px; height: 120px; }
-            .sparky-avatar::before { top: -14px; height: 18px; }
-            .sparky-antenna-glow { top: -22px; width: 14px; height: 14px; }
-            .sparky-eyes { gap: 18px; margin-top: -8px; }
-            .eye { width: 26px; height: 26px; }
-            .eye::before { width: 10px; height: 10px; top: 3px; left: 5px; }
-            .sparky-mouth { bottom: 24px; width: 20px; height: 10px; }
-            .character-name { font-size: 1.6rem; margin-top: 12px; }
-            .btn-main { padding: 14px 25px; font-size: 1.3rem; }
-            .btn-mic { width: 55px; height: 55px; font-size: 1.5rem; }
-            .menu-title { font-size: 2rem; margin-bottom: 20px; }
-            .levels-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; padding: 5px; }
-            .level-card { max-width: 150px; border-radius: 22px; padding: 10px; }
-            .level-icon { font-size: 2.6rem; margin-bottom: 6px; }
-            .level-name { font-size: 0.95rem; }
-            .btn-back { margin-top: 20px; padding: 10px 25px; font-size: 1.1rem; }
-            .chat-window { width: calc(100vw - 30px); right: 15px; height: 380px; bottom: 90px; }
-        }
-    </style>
+    /* Custom Focus State */
+    *:focus-visible {
+      outline: 4px solid #8302BF !important;
+      outline-offset: 4px !important;
+    }
+  </style>
 </head>
-<body>
 
-    <img src="logo.png" class="logo-img" alt="inomaker">
+<body class="min-h-full flex flex-col font-sans antialiased text-slate-800">
 
-    <div class="bg-circle bg-circle-1"></div>
-    <div class="bg-circle bg-circle-2"></div>
-    <div class="bg-circle bg-circle-3"></div>
+  <!-- ÜST HEADER & MARKA LOGO ALANI -->
+  <header class="bg-white/95 backdrop-blur-md border-b-4 border-brand-purple/20 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Marka Logosu (#EEC21A Altın Vurgulu) -->
+      <div class="flex items-center space-x-3 cursor-pointer group" onclick="filterGames('all')">
+        <div class="logo-gold-card p-2 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-105">
+          <img src="logo.png" alt="Inomaker Logo" class="h-10 sm:h-12 w-auto object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'font-fredoka text-2xl font-bold text-brand-purple\'>ino<span class=\'text-brand-yellow\'>maker</span></span>';">
+        </div>
+        <div class="hidden sm:block">
+          <span class="font-fredoka text-xl font-bold text-brand-purple tracking-wide block">Inomaker <span class="text-amber-600">EduWeb</span></span>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">AI & Robotik Portal</span>
+        </div>
+      </div>
 
-    <!-- KARŞILAMA EKRANI -->
-    <div id="view-welcome" class="view active">
-        <div id="speech-bubble" class="speech-bubble" onclick="speakSparky()">Selam! Ben Sparky. Kodlama, robotik ve yapay zeka macerasına hazır mısın? 🤖</div>
+      <!-- Aksiyon Butonları (JSON yükleme butonu kaldırıldı) -->
+      <div class="flex items-center space-x-2 sm:space-x-4">
+        <!-- Sesli Rehber Toggle -->
+        <button id="ttsToggleBtn" onclick="toggleTTS()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-fredoka font-bold px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl text-xs sm:text-sm border-2 border-amber-300 transition-all flex items-center space-x-2 shadow-sm">
+          <i id="ttsIcon" class="fa-solid fa-volume-high text-amber-600"></i>
+          <span class="hidden md:inline">Sesli Rehber</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ANA İÇERİK -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- SPARKY MASCOT KARŞILAMA BANNERI -->
+    <section class="bg-white/90 backdrop-blur-sm border-4 border-white rounded-3xl p-6 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center space-x-4 sm:space-x-6 z-10">
+        <!-- Sparky Avatar -->
+        <div class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-tr from-brand-purple to-purple-500 rounded-full flex items-center justify-center text-4xl text-white shadow-lg border-4 border-amber-300 animate-float shrink-0">
+          🤖
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-fredoka text-2xl sm:text-3xl font-bold text-slate-900">Merhaba! Ben Sparky ✨</h1>
+            <button onclick="speakText('Merhaba arkadaşım! Bugün hangi eğlenceli oyunu oynamak istersin? Aşağıdan bir oyun seç ve hemen başla!')" class="text-brand-purple hover:text-purple-900 text-lg p-1">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <p class="text-slate-600 font-medium text-sm sm:text-base mt-1">
+            Yapay zekâ, kodlama ve eğlenceli bulmacalar seni bekliyor. Kategorini seç ve keşfetmeye başla!
+          </p>
+        </div>
+      </div>
+
+      <!-- Arama Kutusu -->
+      <div class="w-full md:w-72 z-10">
+        <div class="relative">
+          <input type="text" id="searchInput" oninput="searchGames()" placeholder="Oyun ara..." class="w-full bg-slate-100 border-2 border-slate-300 focus:border-brand-purple rounded-2xl px-4 py-3 pl-10 text-sm font-bold outline-none transition-all">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- KATEGORİ FİLTRELERİ -->
+    <section class="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+      <button onclick="filterGames('all')" class="filter-btn active bg-white border-2 border-brand-purple text-brand-purple font-fredoka font-bold px-4 py-2.5 rounded-2xl text-sm sm:text-base shadow-sm hover:bg-brand-purple hover:text-white transition-all flex items-center space-x-2">
+        <span>🌟 Tümü</span>
+      </button>
+      <button onclick="filterGames('ai')" class="filter-btn bg-white border-2 border-brand-purple text-brand-purple font-fredoka font-bold px-4 py-2.5 rounded-2xl text-sm sm:text-base shadow-sm hover:bg-brand-purple hover:text-white transition-all flex items-center space-x-2">
+        <span>🤖 Yapay Zeka</span>
+      </button>
+      <button onclick="filterGames('code')" class="filter-btn bg-white border-2 border-brand-purple text-brand-purple font-fredoka font-bold px-4 py-2.5 rounded-2xl text-sm sm:text-base shadow-sm hover:bg-brand-purple hover:text-white transition-all flex items-center space-x-2">
+        <span>🧩 Kodlama & Robotik</span>
+      </button>
+      <button onclick="filterGames('art')" class="filter-btn bg-white border-2 border-brand-purple text-brand-purple font-fredoka font-bold px-4 py-2.5 rounded-2xl text-sm sm:text-base shadow-sm hover:bg-brand-purple hover:text-white transition-all flex items-center space-x-2">
+        <span>🎨 Sanat & Beceri</span>
+      </button>
+      <button onclick="filterGames('mouse')" class="filter-btn bg-white border-2 border-brand-purple text-brand-purple font-fredoka font-bold px-4 py-2.5 rounded-2xl text-sm sm:text-base shadow-sm hover:bg-brand-purple hover:text-white transition-all flex items-center space-x-2">
+        <span>🖱️ Mouse Becerisi</span>
+      </button>
+    </section>
+
+    <!-- OYUN KARTLARI GRİD DÜZENİ -->
+    <section>
+      <div id="gamesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+        <!-- Dinamik Oyun Kartları Buraya Otomatik Yüklenecek -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- OYUN OYNATMA MODAL PENCERESİ -->
+  <div id="gameModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md hidden flex-col items-center justify-center p-2 sm:p-4">
+    <div id="modalContainer" class="bg-white w-full max-w-[95vw] h-[92vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border-4 border-amber-400 transition-all duration-300">
+      
+      <!-- Modal Header -->
+      <div class="bg-brand-purple text-white px-4 sm:px-6 py-3 flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-3">
+          <span id="modalGameIcon" class="text-2xl">🎮</span>
+          <h2 id="modalGameTitle" class="font-fredoka text-lg sm:text-xl font-bold">Oyun Adı</h2>
+        </div>
         
-        <div class="about-badge">
-            🚀 <strong>inomaker Robotik Kodlama Atölyesi</strong><br>
-            Minik eller, dev fikirler ve geleceğin teknolojileri burada buluşuyor! Python'dan yapay zekaya, kendi oyununu tasarla ve teknolojinin kahramanı sen ol! ✨
+        <div class="flex items-center space-x-2">
+          <!-- Tam Ekran Butonu -->
+          <button onclick="toggleFullscreen()" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold px-3 py-1.5 rounded-xl text-xs sm:text-sm transition-all shadow-md flex items-center space-x-1">
+            <i id="fullscreenIcon" class="fa-solid fa-expand"></i>
+            <span class="hidden sm:inline">Tam Ekran</span>
+          </button>
+          <!-- Kapat Butonu -->
+          <button onclick="closeGameModal()" class="bg-brand-red hover:bg-red-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs sm:text-sm transition-all shadow-md">
+            <i class="fa-solid fa-xmark mr-1"></i> Kapat
+          </button>
         </div>
+      </div>
 
-        <div class="character-card" onclick="speakSparky()">
-            <div id="sparky-avatar" class="sparky-avatar">
-                <div class="sparky-antenna-glow"></div>
-                <div class="sparky-eyes"><div class="eye"></div><div class="eye"></div></div>
-                <div class="sparky-mouth"></div>
-            </div>
-            <div class="character-name">Sparky</div>
-        </div>
-
-        <div class="buttons-row">
-            <button class="btn-mic" id="btn-mic" onclick="toggleListening()" title="Sesli Konuş">🎤</button>
-            <button class="btn-main" onclick="switchView('view-levels'); speakText('Harika! Şimdi etkinlik ve oyun seçme zamanı!');">Başla! ▶</button>
-        </div>
+      <!-- Game Frame Container -->
+      <div class="flex-grow bg-slate-100 relative w-full h-full overflow-hidden flex items-center justify-center">
+        <iframe id="gameIframe" src="" class="w-full h-full border-none" allow="camera; microphone; autoplay"></iframe>
+      </div>
     </div>
+  </div>
 
-    <!-- OYUN VE ETKİNLİK MENÜSÜ -->
-    <div id="view-levels" class="view">
-        <h2 class="menu-title">Etkinlik & Oyun Seç 🎮</h2>
-        <div class="levels-grid">
-            
-            <!-- YENİ EKLENEN MOUSE BECERİLERİ KATEGORİSİ -->
-            <div class="level-card mouse-category" onclick="switchView('view-mouse-games'); speakText('Mouse becerilerini geliştirecek harika oyunlar burada!');">
-                <div class="level-icon">🖱️⭐</div>
-                <div class="level-name">Mouse Becerileri</div>
-            </div>
+  <script>
+    let currentGamesList = [];
+    let activeCategory = 'all';
+    let ttsEnabled = true;
 
-            <div class="level-card featured" onclick="location.href='Games/PromptLab/play.html'">
-                <div class="level-icon">✍️🧠</div>
-                <div class="level-name">Prompt Lab</div>
-            </div>
+    // Türkçe Sesli Rehber (TTS)
+    function speakText(text) {
+      if (!ttsEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'tr-TR';
+      utterance.rate = 0.95;
+      utterance.pitch = 1.1;
+      window.speechSynthesis.speak(utterance);
+    }
 
-            <div class="level-card featured" onclick="location.href='Games/AIEthics/play.html'">
-                <div class="level-icon">⚖️🤖</div>
-                <div class="level-name">AI Etik Dedektifi</div>
-            </div>
+    function toggleTTS() {
+      ttsEnabled = !ttsEnabled;
+      const icon = document.getElementById('ttsIcon');
+      if (ttsEnabled) {
+        icon.className = 'fa-solid fa-volume-high text-amber-600';
+        speakText('Sesli rehber aktif.');
+      } else {
+        icon.className = 'fa-solid fa-volume-xmark text-slate-400';
+        window.speechSynthesis.cancel();
+      }
+    }
 
-            <div class="level-card featured" onclick="location.href='Games/Robotics/play.html'">
-                <div class="level-icon">🦾⚙️</div>
-                <div class="level-name">Robot Parçaları & Sensör Bulmacası</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/BlocklyPuzzle/play.html'">
-                <div class="level-icon">🧩🤖</div>
-                <div class="level-name">Kod Blokları Bulmacası</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/CameraAI/play.html'">
-                <div class="level-icon">🤖📸</div>
-                <div class="level-name">Camera AI</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/memorymatch/play.html'">
-                <div class="level-icon">🧠🤖</div>
-                <div class="level-name">Hafıza Eşleştirme</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/pixel-art/play.html'">
-                <div class="level-icon">🎨🖌️</div>
-                <div class="level-name">Pixel Art Atölyesi</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/ML/play.html'">
-                <div class="level-icon">🍎🥦</div>
-                <div class="level-name">Akıllı Tasnif</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/FaceDetection/play.html'">
-                <div class="level-icon">🎙️🔓</div>
-                <div class="level-name">Sesli Kilit</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/ML2/play.html'">
-                <div class="level-icon">🍦🏭</div>
-                <div class="level-name">Akıllı Fabrika</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/Story/play.html'">
-                <div class="level-icon">🎨✨</div>
-                <div class="level-name">Hikaye Oluşturucu</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/PoseAI/play.html'">
-                <div class="level-icon">💃📸</div>
-                <div class="level-name">Pose AI</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/EmotionAI/play.html'">
-                <div class="level-icon">😃📸</div>
-                <div class="level-name">Duygu Dedektifi</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/MagicDraw/play.html'">
-                <div class="level-icon">✏️🪄</div>
-                <div class="level-name">Sihirli Çizim</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/AutonomousCar/play.html'">
-                <div class="level-icon">🚗🤖</div>
-                <div class="level-name">Otonom Araç</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/RPS/play.html'">
-                <div class="level-icon">✊✌️</div>
-                <div class="level-name">Taş-Kağıt-Makas AI</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/FlappyAI/play.html'">
-                <div class="level-icon">🐦🎮</div>
-                <div class="level-name">Flappy AI</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/RecycleAI/play.html'">
-                <div class="level-icon">♻️🕵️‍♂️</div>
-                <div class="level-name">Sıfır Atık AI</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/Badges/play.html'">
-                <div class="level-icon">🏆🎖️</div>
-                <div class="level-name">Rozetlerim</div>
-            </div>
-
-        </div>
-        <button class="btn-back" onclick="switchView('view-welcome'); speakText('Ana menüye döndük!');">◀ Geri Dön</button>
-    </div>
-
-    <!-- MOUSE BECERİLERİ ÖZEL MENÜSÜ -->
-    <div id="view-mouse-games" class="view">
-        <h2 class="menu-title">Mouse Eğitimi & Oyunları 🖱️</h2>
-        <div class="levels-grid">
-            
-            <div class="level-card" onclick="location.href='Games/MouseSkill/play.html'">
-                <div class="level-icon">🎯🖱️</div>
-                <div class="level-name">Tıklama Avcısı (Sol Tık)</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/DoubleClick/play.html'">
-                <div class="level-icon">🎈💥</div>
-                <div class="level-name">Çift Tık Balon Patlatma</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/DragDrop/play.html'">
-                <div class="level-icon">📦📦</div>
-                <div class="level-name">Sürükle & Bırak Yapboz</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/Maze/play.html'">
-                <div class="level-icon">🌀📍</div>
-                <div class="level-name">Labirent Takibi (Hover)</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/HiddenObject/play.html'">
-                <div class="level-icon">🔍✨</div>
-                <div class="level-name">Gizli Nesne Bulma</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/RightClick/play.html'">
-                <div class="level-icon">🖱️📜</div>
-                <div class="level-name">Sağ Tık Dedektifi</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/ScrollWheel/play.html'">
-                <div class="level-icon">⚙️📜</div>
-                <div class="level-name">Çarkı Döndür (Scroll)</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/ConnectDots/play.html'">
-                <div class="level-icon">1️⃣2️⃣3️⃣</div>
-                <div class="level-name">Nokta Birleştirme</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/TargetPrecision/play.html'">
-                <div class="level-icon">⚡🎯</div>
-                <div class="level-name">Hızlı Hedef Vurma</div>
-            </div>
-
-            <div class="level-card" onclick="location.href='Games/DragPaint/play.html'">
-                <div class="level-icon">🎨🖌️</div>
-                <div class="level-name">Sürükleyerek Resim Boyama</div>
-            </div>
-
-        </div>
-        <button class="btn-back" onclick="switchView('view-levels'); speakText('Etkinlik menüsüne geri döndük!');">◀ Etkinlik Menüsüne Dön</button>
-    </div>
-
-    <!-- SPARKY CHAT WIDGET -->
-    <div class="chat-widget-btn" onclick="toggleChatWindow()">
-        🤖
-        <div class="chat-badge">AI</div>
-    </div>
-
-    <div class="chat-window" id="chat-window">
-        <div class="chat-header">
-            <span>Sparky AI Asistan</span>
-            <button class="chat-close" onclick="toggleChatWindow()">✕</button>
-        </div>
-        <div class="chat-messages" id="chat-messages">
-            <div class="msg sparky">Selam! Ben Sparky. Kodlama, robotik veya yapay zeka hakkında bana dilediğin soruyu sorabilirsin! 🚀</div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" id="chat-input" class="chat-input" placeholder="Bir şeyler sor..." onkeypress="handleChatKeyPress(event)">
-            <button class="chat-send" onclick="sendChatMessage()">Gönder</button>
-        </div>
-    </div>
-
-    <script>
-        function switchView(viewId) {
-            document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            window.scrollTo(0, 0); 
+    // game.json Dosyasını Otomatik Çekme
+    async function loadGamesData() {
+      try {
+        const response = await fetch('game.json');
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            currentGamesList = data;
+          }
+        } else {
+          console.error('game.json dosyası yüklenemedi.');
         }
+      } catch (err) {
+        console.error('JSON dosyası okunurken hata oluştu:', err);
+      }
+      renderGames();
+    }
 
-        const synth = window.speechSynthesis;
+    // Oyun Kartlarını Ekrana Basma
+    function renderGames() {
+      const grid = document.getElementById('gamesGrid');
+      grid.innerHTML = '';
 
-        function speakText(text) {
-            if (!synth) return;
-            synth.cancel(); 
+      const query = document.getElementById('searchInput').value.toLowerCase();
 
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'tr-TR';
-            utterance.pitch = 1.2; 
-            utterance.rate = 1.0;  
+      const filtered = currentGamesList.filter(game => {
+        const matchesCategory = (activeCategory === 'all') || (game.category === activeCategory);
+        const matchesSearch = game.title.toLowerCase().includes(query);
+        return matchesCategory && matchesSearch;
+      });
 
-            const avatar = document.getElementById('sparky-avatar');
-            const bubble = document.getElementById('speech-bubble');
-            if(bubble) bubble.innerText = text;
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-white/80 rounded-3xl p-8 text-center border-2 border-dashed border-slate-300">
+            <span class="text-4xl block mb-2">🔍</span>
+            <p class="font-fredoka text-lg font-bold text-slate-700">Aradığınız kriterlere uygun oyun bulunamadı.</p>
+          </div>
+        `;
+        return;
+      }
 
-            utterance.onstart = () => { if(avatar) avatar.classList.add('speaking'); };
-            utterance.onend = () => { if(avatar) avatar.classList.remove('speaking'); };
+      filtered.forEach(game => {
+        const card = document.createElement('div');
+        card.className = `bg-white rounded-3xl p-4 flex flex-col items-center justify-between text-center cursor-pointer border-4 transition-all duration-200 transform hover:-translate-y-2 hover:shadow-2xl shadow-playful active:translate-y-1 relative group min-h-[190px] ${
+          game.featured ? 'border-brand-red bg-amber-50/50' : 'border-white'
+        }`;
 
-            synth.speak(utterance);
+        card.onclick = () => launchGame(game);
+        card.onmouseenter = () => speakText(game.title);
+
+        card.innerHTML = `
+          ${game.featured ? '<span class="absolute -top-3 bg-brand-red text-white font-fredoka text-[10px] uppercase font-bold px-3 py-0.5 rounded-full shadow">Öne Çıkan</span>' : ''}
+          <div class="text-5xl my-2 transform group-hover:scale-110 transition-transform">
+            ${game.icon}
+          </div>
+          <h3 class="font-fredoka text-base sm:text-lg font-bold text-slate-800 leading-tight">
+            ${game.title}
+          </h3>
+          <button class="mt-3 w-full bg-brand-purple hover:bg-purple-800 text-white font-fredoka font-bold text-xs py-2 px-3 rounded-xl shadow transition-all">
+            Oyna <i class="fa-solid fa-play ml-1"></i>
+          </button>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Kategorilere Göre Filtreleme
+    function filterGames(category) {
+      activeCategory = category;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-purple', 'text-white');
+      });
+
+      event?.currentTarget?.classList.add('active');
+      renderGames();
+    }
+
+    function searchGames() {
+      renderGames();
+    }
+
+    // Oyun Başlatma Yöneticisi
+    function launchGame(game) {
+      speakText(`${game.title} açılıyor.`);
+
+      if (game.isInternalRoute) {
+        alert(`${game.title} dahili alanına yönlendiriliyorsunuz.`);
+      } else {
+        const modal = document.getElementById('gameModal');
+        const iframe = document.getElementById('gameIframe');
+        document.getElementById('modalGameTitle').innerText = game.title;
+        document.getElementById('modalGameIcon').innerText = game.icon;
+        
+        iframe.src = game.path;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeGameModal() {
+      const modal = document.getElementById('gameModal');
+      const iframe = document.getElementById('gameIframe');
+      iframe.src = '';
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Sayfa Yüklendiğinde game.json Dosyasını Otomatik Çek
+    window.onload = () => {
+      loadGamesData();
+    };
+
+    function toggleFullscreen() {
+      const modalContainer = document.getElementById('modalContainer');
+      const icon = document.getElementById('fullscreenIcon');
+
+      if (!document.fullscreenElement) {
+        if (modalContainer.requestFullscreen) {
+          modalContainer.requestFullscreen();
+        } else if (modalContainer.webkitRequestFullscreen) { /* Safari */
+          modalContainer.webkitRequestFullscreen();
         }
-
-        function speakSparky() {
-            const greetings = [
-                "Selam! Ben Sparky. Bugün hangi harika yapay zeka oyununu oynayacağız?",
-                "Merhaba geleceğin mühendisleri! Kodlama yapmaya hazır mısınız?",
-                "inomaker Atölyesi'ne hoş geldin! Hadi aşağıdan bir oyun seçelim.",
-                "Harika bir gün! Yeni robotik projelerini keşfetmek için sabırsızlanıyorum."
-            ];
-            speakText(greetings[Math.floor(Math.random() * greetings.length)]);
+        icon.className = 'fa-solid fa-compress';
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
         }
-
-        let recognition;
-        let listening = false;
-
-        function toggleListening() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert("Tarayıcınız sesli komut özelliğini desteklemiyor. Lütfen Chrome kullanın.");
-                return;
-            }
-
-            const micBtn = document.getElementById('btn-mic');
-            if (listening) {
-                if (recognition) recognition.stop();
-                return;
-            }
-
-            recognition = new SpeechRecognition();
-            recognition.lang = 'tr-TR';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            recognition.onstart = () => {
-                listening = true;
-                micBtn.classList.add('listening');
-                speakText("Dinliyorum, seni duyabiliyorum!");
-            };
-
-            recognition.onresult = (event) => {
-                const speechResult = event.results[0][0].transcript.toLowerCase();
-                document.getElementById('speech-bubble').innerText = `Dedin ki: "${speechResult}"`;
-                
-                if (speechResult.includes('oyun') || speechResult.includes('başla') || speechResult.includes('menü')) {
-                    speakText("Hemen etkinlik menüsünü açıyorum!");
-                    setTimeout(() => switchView('view-levels'), 1500);
-                } else if (speechResult.includes('mouse') || speechResult.includes('fare')) {
-                    speakText("Mouse becerileri menüsünü açıyorum!");
-                    setTimeout(() => switchView('view-mouse-games'), 1500);
-                } else if (speechResult.includes('sensör') || speechResult.includes('parça') || speechResult.includes('mühendis')) {
-                    speakText("Robot Parçaları ve Sensör Bulmacası'nı açıyorum!");
-                    setTimeout(() => { location.href = 'Games/SensorPuzzle/play.html'; }, 1500);
-                } else if (speechResult.includes('bulmaca') || speechResult.includes('blok')) {
-                    speakText("Kod blokları bulmacasını açıyorum!");
-                    setTimeout(() => { location.href = 'Games/BlocklyPuzzle/play.html'; }, 1500);
-                } else if (speechResult.includes('prompt') || speechResult.includes('komut')) {
-                    speakText("Prompt Laboratuvarı'nı açıyorum!");
-                    setTimeout(() => { location.href = 'Games/PromptLab/play.html'; }, 1500);
-                } else {
-                    speakText(`"${speechResult}" dediğini duydum. Harika bir fikir!`);
-                }
-            };
-
-            recognition.onerror = () => {
-                listening = false;
-                micBtn.classList.remove('listening');
-                speakText("Sesi tam anlayamadım, tekrar dener misin?");
-            };
-
-            recognition.onend = () => {
-                listening = false;
-                micBtn.classList.remove('listening');
-            };
-
-            recognition.start();
-        }
-
-        function toggleChatWindow() {
-            const win = document.getElementById('chat-window');
-            win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
-            if (win.style.display === 'flex') document.getElementById('chat-input').focus();
-        }
-
-        function handleChatKeyPress(event) {
-            if (event.key === 'Enter') sendChatMessage();
-        }
-
-        function sendChatMessage() {
-            const inputField = document.getElementById('chat-input');
-            const text = inputField.value.trim();
-            if (!text) return;
-
-            const messagesContainer = document.getElementById('chat-messages');
-            const userMsg = document.createElement('div');
-            userMsg.className = 'msg user';
-            userMsg.innerText = text;
-            messagesContainer.appendChild(userMsg);
-
-            inputField.value = '';
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-            setTimeout(() => {
-                const replyText = getSparkyReply(text.toLowerCase());
-                const sparkyMsg = document.createElement('div');
-                sparkyMsg.className = 'msg sparky';
-                sparkyMsg.innerText = replyText;
-                messagesContainer.appendChild(sparkyMsg);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                speakText(replyText);
-            }, 600);
-        }
-
-        function getSparkyReply(query) {
-            const knowledgeBase = [
-                {
-                    keywords: ['mouse', 'fare', 'tıklama', 'sürükle'],
-                    answer: "Mouse Becerileri menümüzden sol tık, çift tık, sağ tık ve sürükle-bırak oyunları oynayarak bilgisayar kullanımını hızlandırabilirsin!"
-                },
-                {
-                    keywords: ['prompt', 'istek', 'yönlendirme', 'komut'],
-                    answer: "Prompt mühendisliği, yapay zekaya ne yapması gerektiğini en net ve detaylı şekilde anlatma sanatıdır! Ne kadar net olursan, o kadar harika yanıtlar alırsın."
-                },
-                {
-                    keywords: ['etik', 'önyargı', 'doğru mu', 'yanlış mı', 'bias'],
-                    answer: "Yapay zeka insanlardan öğrenir. Eğer ona hatalı veya eksik bilgi verirsek, taraflı kararlar verebilir. Buna AI Yanlılığı (Bias) denir."
-                },
-                {
-                    keywords: ['sensör', 'parça', 'mühendis'],
-                    answer: "Robot Parçaları & Sensör Bulmacası ile mesafe, ışık ve sıcaklık sensörleri gibi donanımları doğru yerlere yerleştirerek robotunu tamamlayabilirsin!"
-                },
-                {
-                    keywords: ['python', 'kod', 'yazılım', 'programlama'],
-                    answer: "Python, metin tabanlı harika bir programlama dilidir! Pygame ile oyunlar kodlayabilir ya da yapay zeka modelleri eğitebilirsin."
-                },
-                {
-                    keywords: ['bulmaca', 'blok', 'algoritma', 'kod bloğu'],
-                    answer: "Kod Blokları Bulmacası, mantıksal sıralama yapmanı sağlayan harika bir etkinliktir. Robotu hedefe ulaştırmak için ileri git ve dön bloklarını doğru sırayla dizmelisin!"
-                }
-            ];
-
-            for (const item of knowledgeBase) {
-                if (item.keywords.some(kw => query.includes(kw))) {
-                    return item.answer;
-                }
-            }
-
-            return "Bu çok ilginç bir soru! Kodlama, robotik ve yapay zeka dünyasında keşfedecek daha çok şey var. Hadi bir oyun seçip denemeye başlayalım!";
-        }
-    </script>
+        icon.className = 'fa-solid fa-expand';
+      }
+    }
+  </script>
 </body>
 </html>

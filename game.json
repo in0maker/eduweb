@@ -1,0 +1,272 @@
+[
+  {
+    "id": "mouse-special",
+    "title": "Mouse Becerileri (Özel Alan)",
+    "icon": "🖱️⭐",
+    "category": "mouse",
+    "path": "#mouse",
+    "isInternalRoute": true,
+    "featured": false
+  },
+  {
+    "id": "prompt-lab",
+    "title": "Prompt Lab",
+    "icon": "✍️🧠",
+    "category": "ai",
+    "path": "Games/PromptLab/game.html",
+    "isInternalRoute": false,
+    "featured": true
+  },
+  {
+    "id": "ai-ethics",
+    "title": "AI Etik Dedektifi",
+    "icon": "⚖️🤖",
+    "category": "ai",
+    "path": "Games/AIEthics/game.html",
+    "isInternalRoute": false,
+    "featured": true
+  },
+  {
+    "id": "camera-ai",
+    "title": "Camera AI",
+    "icon": "🤖📸",
+    "category": "ai",
+    "path": "Games/CameraAI/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "ml-sorting",
+    "title": "Akıllı Tasnif",
+    "icon": "🍎🥦",
+    "category": "ai",
+    "path": "Games/ML/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "face-detection",
+    "title": "Sesli Kilit",
+    "icon": "🎙️🔓",
+    "category": "ai",
+    "path": "Games/FaceDetection/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "pose-ai",
+    "title": "Pose AI",
+    "icon": "💃📸",
+    "category": "ai",
+    "path": "Games/PoseAI/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "emotion-ai",
+    "title": "Duygu Dedektifi",
+    "icon": "😃📸",
+    "category": "ai",
+    "path": "Games/EmotionAI/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "rps-ai",
+    "title": "Taş-Kağıt-Makas AI",
+    "icon": "✊✌️",
+    "category": "ai",
+    "path": "Games/RPS/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "flappy-ai",
+    "title": "Flappy AI",
+    "icon": "🐦🎮",
+    "category": "ai",
+    "path": "Games/FlappyAI/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "recycle-ai",
+    "title": "Sıfır Atık AI",
+    "icon": "♻️🕵️‍♂️",
+    "category": "ai",
+    "path": "Games/RecycleAI/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "robotics",
+    "title": "Robot Parçaları & Sensör Bulmacası",
+    "icon": "🦾⚙️",
+    "category": "code",
+    "path": "Games/Robotics/game.html",
+    "isInternalRoute": false,
+    "featured": true
+  },
+  {
+    "id": "blockly-puzzle",
+    "title": "Kod Blokları Bulmacası",
+    "icon": "🧩🤖",
+    "category": "code",
+    "path": "Games/BlocklyPuzzle/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "smart-factory",
+    "title": "Akıllı Fabrika",
+    "icon": "🍦🏭",
+    "category": "code",
+    "path": "Games/ML2/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "autonomous-car",
+    "title": "Otonom Araç",
+    "icon": "🚗🤖",
+    "category": "code",
+    "path": "Games/AutonomousCar/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "pixel-art",
+    "title": "Pixel Art Atölyesi",
+    "icon": "🎨🖌️",
+    "category": "art",
+    "path": "Games/pixel-art/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "story-creator",
+    "title": "Hikaye Oluşturucu",
+    "icon": "🎨✨",
+    "category": "art",
+    "path": "Games/Story/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "magic-draw",
+    "title": "Sihirli Çizim",
+    "icon": "✏️🪄",
+    "category": "art",
+    "path": "Games/MagicDraw/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "memory-match",
+    "title": "Hafıza Eşleştirme",
+    "icon": "🧠🤖",
+    "category": "art",
+    "path": "Games/memorymatch/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "badges",
+    "title": "Rozetlerim",
+    "icon": "🏆🎖️",
+    "category": "art",
+    "path": "Games/Badges/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "connect-dots",
+    "title": "Noktaları Birleştir",
+    "icon": "🔗✏️",
+    "category": "mouse",
+    "path": "Games/ConnectDots/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "double-click",
+    "title": "Çift Tıklama Atölyesi",
+    "icon": "🖱️⚡",
+    "category": "mouse",
+    "path": "Games/DoubleClick/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "drag-drop",
+    "title": "Sürükle ve Bırak",
+    "icon": "📦🔄",
+    "category": "mouse",
+    "path": "Games/DragDrop/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "drag-paint",
+    "title": "Sürükle Boya",
+    "icon": "🎨🖌️",
+    "category": "mouse",
+    "path": "Games/DragPaint/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "hidden-object",
+    "title": "Gizli Nesne Bulmaca",
+    "icon": "🔍🧩",
+    "category": "art",
+    "path": "Games/HiddenObject/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "maze",
+    "title": "Labirent Bulmacası",
+    "icon": "🌀🏃‍♂️",
+    "category": "mouse",
+    "path": "Games/Maze/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "mouse-skill",
+    "title": "Mouse Yetenek Testi",
+    "icon": "🖱️🎯",
+    "category": "mouse",
+    "path": "Games/MouseSkill/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "right-click",
+    "title": "Sağ Tık Becerisi",
+    "icon": "🖱️📋",
+    "category": "mouse",
+    "path": "Games/RightClick/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "scroll-wheel",
+    "title": "Kaydırma Tekerleği",
+    "icon": "📜⬆️",
+    "category": "mouse",
+    "path": "Games/ScrollWheel/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  },
+  {
+    "id": "target-precision",
+    "title": "Hedef Hassasiyeti",
+    "icon": "🎯🏹",
+    "category": "mouse",
+    "path": "Games/TargetPrecision/game.html",
+    "isInternalRoute": false,
+    "featured": false
+  }
+]
