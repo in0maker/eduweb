@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sağ Tık Dedektifi 🖱️📜</title>
+    <style>
+        body { margin: 0; background: #34495e; color: white; font-family: sans-serif; text-align: center; user-select: none; }
+        .target-card { width: 200px; height: 150px; background: #e74c3c; margin: 50px auto; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: context-menu; }
+        #custom-menu { display: none; position: absolute; background: white; color: black; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); padding: 10px; text-align: left; }
+        #custom-menu div { padding: 8px 15px; cursor: pointer; border-radius: 4px; }
+        #custom-menu div:hover { background: #3498db; color: white; }
+    </style>
+</head>
+<body>
+    <h2>Kırmızı Kutuya SAĞ TIKLA ve "Hazineyi Aç"ı Seç! 🏴‍☠️</h2>
+    <div class="target-card" id="card">Bana Sağ Tıkla!</div>
+
+    <div id="custom-menu">
+        <div onclick="alert('Yanlış Seçenek!')">İncele</div>
+        <div onclick="unlock()">🔓 Hazineyi Aç</div>
+        <div onclick="alert('Yanlış Seçenek!')">Yeniden Adlandır</div>
+    </div>
+
+    <script>
+        const card = document.getElementById('card');
+        const menu = document.getElementById('custom-menu');
+
+        card.oncontextmenu = (e) => {
+            e.preventDefault();
+            menu.style.display = 'block';
+            menu.style.left = e.pageX + 'px';
+            menu.style.top = e.pageY + 'px';
+        };
+
+        document.onclick = () => menu.style.display = 'none';
+
+        function unlock() {
+            card.style.background = '#2ecc71';
+            card.innerText = '💎 Hazine Açıldı!';
+            alert('Harika! Sağ tık menüsünü kullanmayı öğrendin!');
+        }
+    </script>
+</body>
+</html>

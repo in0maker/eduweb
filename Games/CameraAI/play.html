@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>inomaker - Sparky ile Öğren (Iframe)</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+    <style>
+  /* ========================================== */
+        /* TABLET DOSTU GENEL AYARLAR                 */
+        /* ========================================== */
+        body {
+            margin: 0; padding: 0;
+            /* Arkaplanı ana sayfanla uyumlu açık buz mavisi/gri yapıyoruz */
+            background-color: transparent; /* Eğer iframe kullanıyorsan transparent en iyisidir */
+            /* Eğer transparent sorun yaratırsa şunu kullan: background-color: #f4f7f9; */
+            
+            color: #333333;
+            font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; overflow: hidden; position: relative;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ========================================== */
+        /* OYUN EKRANI VE KAMERA AYARLARI             */
+        /* ========================================== */
+        .game-area {
+            /* Oyun alanı ana beyaz kartımız olacak */
+            background: #ffffff; 
+            width: 90%; 
+            max-width: 800px; 
+            border-radius: 30px; /* Kenar ovalliği görsellerdeki gibi yumuşatıldı */
+            padding: 40px 20px; 
+            /* Görsellerdeki gibi çok yumuşak bir gölge eklendi */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
+            text-align: center;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .view {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 2; width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* ========================================== */
+        /* ORTAK BİLEŞENLER (Sparky, Butonlar)        */
+        /* ========================================== */
+        .sparky-avatar {
+            width: 120px; height: 120px; background: radial-gradient(circle at 35% 35%, #5094ff, #1a4fcc);
+            border-radius: 50%; position: relative; display: flex; justify-content: center; align-items: center;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.3);
+            margin: 10px auto;
+        }
+        .sparky-avatar::before { content: ''; position: absolute; top: -12px; width: 6px; height: 15px; background-color: #cbdcf7; border-radius: 4px; }
+        .sparky-antenna-glow { position: absolute; top: -20px; width: 12px; height: 12px; background-color: #ffee55; border-radius: 50%; box-shadow: 0 0 10px #ffee55; }
+        .sparky-eyes { display: flex; gap: 20px; margin-top: -10px; }
+        .eye { width: 24px; height: 24px; background-color: #1a1a1a; border-radius: 50%; position: relative; }
+        .eye::before { content: ''; position: absolute; top: 4px; left: 4px; width: 8px; height: 8px; background-color: #ffffff; border-radius: 50%; }
+        .sparky-mouth { position: absolute; bottom: 25px; width: 20px; height: 8px; border-bottom: 4px solid #1a1a1a; border-radius: 0 0 15px 15px; transition: all 0.2s; }
+
+        /* ========================================== */
+        /* OYUN EKRANI VE KAMERA AYARLARI             */
+        /* ========================================== */
+ 
+
+        .speech-bubble {
+            background-color: #fffdf6; border-radius: 20px; padding: 15px 20px;
+            font-size: 1.8rem; font-weight: bold; color: #2b2b2b; text-align: center;
+            border: 4px solid #fab216; margin-bottom: 15px; min-width: 250px;
+        }
+
+        .camera-wrapper {
+            position: relative; width: 300px; height: 300px;
+            border-radius: 30px; overflow: hidden; border: 8px solid #5094ff;
+            background-color: #000; margin: 10px 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        #webcam-video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        
+        .camera-controls { display: flex; gap: 20px; margin-top: 15px; }
+        
+        .btn-circle {
+            background-color: #5094ff; color: white; border: none; border-radius: 50%;
+            width: 80px; height: 80px; font-size: 2.5rem; cursor: pointer;
+            box-shadow: 0 6px 0 #1a4fcc; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-circle:active { transform: translateY(6px); box-shadow: 0 0 0 #1a4fcc; }
+        .btn-circle.green { background-color: #4caf50; box-shadow: 0 6px 0 #2e7d32; }
+        .btn-circle.green:active { box-shadow: 0 0 0 #2e7d32; }
+
+        /* ========================================== */
+        /* ÖĞRETMEN AYARLARI (GİZLİ KÖŞE BUTONU)      */
+        /* ========================================== */
+        .btn-settings {
+            position: absolute; top: 20px; right: 20px;
+            background: #f0f0f0; /* Beyaz zeminde görünür olması için güncellendi */
+            color: #333;
+            border: 1px solid #ccc; 
+            border-radius: 50%;
+            width: 50px; height: 50px; font-size: 1.5rem; cursor: pointer; z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .settings-panel {
+            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 30px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            z-index: 100; width: 80%; max-width: 500px; text-align: center;
+        }
+        .settings-panel.active { display: block; }
+        .settings-panel input { width: 90%; padding: 15px; font-size: 1rem; margin: 15px 0; border-radius: 10px; border: 2px solid #ccc; color: #333; }
+        .settings-panel button { padding: 10px 20px; font-size: 1.2rem; background: #4caf50; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        .overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99; }
+        .overlay.active { display: block; }
+
+    </style>
+</head>
+<body>
+
+    <button class="btn-settings" onclick="toggleSettings()">⚙️</button>
+
+    <div class="overlay" id="overlay" onclick="toggleSettings()"></div>
+    <div class="settings-panel" id="settings-panel">
+        <h3>Öğretmen Paneli 👩‍🏫</h3>
+        <p>Teachable Machine linkini buraya yapıştırın:</p>
+        <input type="text" id="tm-link-input" placeholder="https://teachablemachine.withgoogle.com/models/...">
+        <button onclick="saveLinkAndClose()">Kaydet ve Kapat</button>
+    </div>
+
+    <div id="view-game" class="view">
+        <div class="game-area">
+            
+            <div class="speech-bubble" id="sparky-speech">
+                Kamerayı açmak için 📷'e bas!
+            </div>
+
+            <div class="sparky-avatar" id="sparky-mini">
+                <div class="sparky-antenna-glow"></div>
+                <div class="sparky-eyes"><div class="eye"></div><div class="eye"></div></div>
+                <div class="sparky-mouth" id="sparky-mouth-mini"></div>
+            </div>
+
+            <div class="camera-wrapper">
+                <video id="webcam-video" autoplay playsinline muted></video>
+            </div>
+
+            <div class="camera-controls">
+                <button class="btn-circle green" onclick="startCamera()">📷</button>
+                <button class="btn-circle" onclick="flipCamera()">🔄</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- EMOJİ SÖZLÜĞÜ (Otomatik Sınıf Eşleştirme) ---
+        const emojiDictionary = {
+            "Gunes": "☀️", "Güneş": "☀️", "Yagmur": "🌧️", "Yağmur": "🌧️",
+            "Bulut": "☁️", "Kar": "❄️", "Kedi": "🐱", "Kopek": "🐶", "Köpek": "🐶",
+            "Mutlu": "😊", "Uzgun": "😢", "Üzgün": "😢", "Kizgin": "😡", "Kızgın": "😡",
+            "Elma": "🍎", "Kalem": "✏️", "Kitap": "📖", "Muz": "🍌"
+        };
+
+        // --- DEĞİŞKENLER ---
+        let model, maxPredictions;
+        let isCameraRunning = false;
+        let isFrontCamera = true;
+        let videoElement = document.getElementById('webcam-video');
+        let currentStream = null;
+        let requestAnimFrameId;
+
+        // Varsayılan Link
+        let TM_URL = localStorage.getItem("tmModelUrl") || "https://teachablemachine.withgoogle.com/models/ws0dmFv3O/";
+
+        // --- ÖĞRETMEN AYARLARI ---
+        function toggleSettings() {
+            const panel = document.getElementById('settings-panel');
+            const overlay = document.getElementById('overlay');
+            panel.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.getElementById('tm-link-input').value = TM_URL;
+        }
+
+        function saveLinkAndClose() {
+            let inputUrl = document.getElementById('tm-link-input').value.trim();
+            if(!inputUrl.endsWith("/")) inputUrl += "/"; 
+            TM_URL = inputUrl;
+            localStorage.setItem("tmModelUrl", TM_URL); 
+            toggleSettings();
+            alert("Model Linki Kaydedildi! 🚀");
+            model = null; 
+        }
+
+        // --- KAMERA FONKSİYONLARI ---
+        async function startCamera() {
+            if (isCameraRunning) return;
+            document.getElementById('sparky-speech').innerHTML = "Düşünüyorum... ⏳";
+
+            if (!model) {
+                try {
+                    const modelURL = TM_URL + "model.json";
+                    const metadataURL = TM_URL + "metadata.json";
+                    model = await tmImage.load(modelURL, metadataURL);
+                    maxPredictions = model.getTotalClasses();
+                } catch (error) {
+                    document.getElementById('sparky-speech').innerHTML = "Link hatalı olabilir! ⚙️'dan kontrol et.";
+                    return;
+                }
+            }
+
+            setupVideoStream();
+        }
+
+        async function setupVideoStream() {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+
+            const constraints = {
+                video: {
+                    facingMode: isFrontCamera ? "user" : "environment",
+                    width: 300, height: 300
+                }
+            };
+
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                videoElement.srcObject = currentStream;
+                
+                videoElement.style.transform = isFrontCamera ? "scaleX(-1)" : "scaleX(1)";
+
+                videoElement.onloadedmetadata = () => {
+                    isCameraRunning = true;
+                    videoElement.play();
+                    requestAnimFrameId = window.requestAnimationFrame(loop);
+                };
+            } catch (err) {
+                document.getElementById('sparky-speech').innerHTML = "Kameraya izin vermelisin! 😢";
+            }
+        }
+
+        function flipCamera() {
+            isFrontCamera = !isFrontCamera;
+            if (isCameraRunning) {
+                setupVideoStream(); 
+            }
+        }
+
+        // --- YAPAY ZEKA DÖNGÜSÜ ---
+        async function loop() {
+            if (!isCameraRunning) return;
+            await predict();
+            requestAnimFrameId = window.requestAnimationFrame(loop);
+        }
+
+        async function predict() {
+            if (!model || videoElement.paused) return;
+            
+            const prediction = await model.predict(videoElement);
+            
+            let bestMatch = { className: "", probability: 0 };
+            for (let i = 0; i < maxPredictions; i++) {
+                if (prediction[i].probability > bestMatch.probability) {
+                    bestMatch = prediction[i];
+                }
+            }
+
+            if (bestMatch.probability > 0.85) {
+                let cName = bestMatch.className;
+                let emoji = emojiDictionary[cName] || "✨"; 
+                
+                document.getElementById('sparky-speech').innerHTML = `${emoji} ${cName}`;
+                document.getElementById('sparky-mouth-mini').style.borderRadius = "50%"; 
+            } else {
+                document.getElementById('sparky-mouth-mini').style.borderRadius = "0 0 15px 15px";
+            }
+        }
+    </script>
+</body>
+</html>

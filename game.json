@@ -13,7 +13,7 @@
     "title": "Prompt Lab",
     "icon": "✍️🧠",
     "category": "ai",
-    "path": "Games/PromptLab/game.html",
+    "path": "Games/PromptLab/play.html",
     "isInternalRoute": false,
     "featured": true
   },
@@ -22,7 +22,7 @@
     "title": "AI Etik Dedektifi",
     "icon": "⚖️🤖",
     "category": "ai",
-    "path": "Games/AIEthics/game.html",
+    "path": "Games/AIEthics/play.html",
     "isInternalRoute": false,
     "featured": true
   },
@@ -31,7 +31,7 @@
     "title": "Camera AI",
     "icon": "🤖📸",
     "category": "ai",
-    "path": "Games/CameraAI/game.html",
+    "path": "Games/CameraAI/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -40,7 +40,7 @@
     "title": "Akıllı Tasnif",
     "icon": "🍎🥦",
     "category": "ai",
-    "path": "Games/ML/game.html",
+    "path": "Games/ML/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -49,7 +49,7 @@
     "title": "Sesli Kilit",
     "icon": "🎙️🔓",
     "category": "ai",
-    "path": "Games/FaceDetection/game.html",
+    "path": "Games/FaceDetection/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -58,7 +58,7 @@
     "title": "Pose AI",
     "icon": "💃📸",
     "category": "ai",
-    "path": "Games/PoseAI/game.html",
+    "path": "Games/PoseAI/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -67,7 +67,7 @@
     "title": "Duygu Dedektifi",
     "icon": "😃📸",
     "category": "ai",
-    "path": "Games/EmotionAI/game.html",
+    "path": "Games/EmotionAI/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -76,7 +76,7 @@
     "title": "Taş-Kağıt-Makas AI",
     "icon": "✊✌️",
     "category": "ai",
-    "path": "Games/RPS/game.html",
+    "path": "Games/RPS/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -85,7 +85,7 @@
     "title": "Flappy AI",
     "icon": "🐦🎮",
     "category": "ai",
-    "path": "Games/FlappyAI/game.html",
+    "path": "Games/FlappyAI/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -94,7 +94,7 @@
     "title": "Sıfır Atık AI",
     "icon": "♻️🕵️‍♂️",
     "category": "ai",
-    "path": "Games/RecycleAI/game.html",
+    "path": "Games/RecycleAI/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -103,7 +103,7 @@
     "title": "Robot Parçaları & Sensör Bulmacası",
     "icon": "🦾⚙️",
     "category": "code",
-    "path": "Games/Robotics/game.html",
+    "path": "Games/Robotics/play.html",
     "isInternalRoute": false,
     "featured": true
   },
@@ -112,7 +112,7 @@
     "title": "Kod Blokları Bulmacası",
     "icon": "🧩🤖",
     "category": "code",
-    "path": "Games/BlocklyPuzzle/game.html",
+    "path": "Games/BlocklyPuzzle/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -121,7 +121,7 @@
     "title": "Akıllı Fabrika",
     "icon": "🍦🏭",
     "category": "code",
-    "path": "Games/ML2/game.html",
+    "path": "Games/ML2/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -130,7 +130,7 @@
     "title": "Otonom Araç",
     "icon": "🚗🤖",
     "category": "code",
-    "path": "Games/AutonomousCar/game.html",
+    "path": "Games/AutonomousCar/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -139,7 +139,7 @@
     "title": "Pixel Art Atölyesi",
     "icon": "🎨🖌️",
     "category": "art",
-    "path": "Games/pixel-art/game.html",
+    "path": "Games/pixel-art/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -148,7 +148,7 @@
     "title": "Hikaye Oluşturucu",
     "icon": "🎨✨",
     "category": "art",
-    "path": "Games/Story/game.html",
+    "path": "Games/Story/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -157,7 +157,7 @@
     "title": "Sihirli Çizim",
     "icon": "✏️🪄",
     "category": "art",
-    "path": "Games/MagicDraw/game.html",
+    "path": "Games/MagicDraw/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -166,7 +166,7 @@
     "title": "Hafıza Eşleştirme",
     "icon": "🧠🤖",
     "category": "art",
-    "path": "Games/memorymatch/game.html",
+    "path": "Games/memorymatch/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -175,7 +175,7 @@
     "title": "Rozetlerim",
     "icon": "🏆🎖️",
     "category": "art",
-    "path": "Games/Badges/game.html",
+    "path": "Games/Badges/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -184,7 +184,7 @@
     "title": "Noktaları Birleştir",
     "icon": "🔗✏️",
     "category": "mouse",
-    "path": "Games/ConnectDots/game.html",
+    "path": "Games/ConnectDots/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -193,7 +193,7 @@
     "title": "Çift Tıklama Atölyesi",
     "icon": "🖱️⚡",
     "category": "mouse",
-    "path": "Games/DoubleClick/game.html",
+    "path": "Games/DoubleClick/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -202,7 +202,7 @@
     "title": "Sürükle ve Bırak",
     "icon": "📦🔄",
     "category": "mouse",
-    "path": "Games/DragDrop/game.html",
+    "path": "Games/DragDrop/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -211,7 +211,7 @@
     "title": "Sürükle Boya",
     "icon": "🎨🖌️",
     "category": "mouse",
-    "path": "Games/DragPaint/game.html",
+    "path": "Games/DragPaint/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -220,7 +220,7 @@
     "title": "Gizli Nesne Bulmaca",
     "icon": "🔍🧩",
     "category": "art",
-    "path": "Games/HiddenObject/game.html",
+    "path": "Games/HiddenObject/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -229,7 +229,7 @@
     "title": "Labirent Bulmacası",
     "icon": "🌀🏃‍♂️",
     "category": "mouse",
-    "path": "Games/Maze/game.html",
+    "path": "Games/Maze/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -238,7 +238,7 @@
     "title": "Mouse Yetenek Testi",
     "icon": "🖱️🎯",
     "category": "mouse",
-    "path": "Games/MouseSkill/game.html",
+    "path": "Games/MouseSkill/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -247,7 +247,7 @@
     "title": "Sağ Tık Becerisi",
     "icon": "🖱️📋",
     "category": "mouse",
-    "path": "Games/RightClick/game.html",
+    "path": "Games/RightClick/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -256,7 +256,7 @@
     "title": "Kaydırma Tekerleği",
     "icon": "📜⬆️",
     "category": "mouse",
-    "path": "Games/ScrollWheel/game.html",
+    "path": "Games/ScrollWheel/play.html",
     "isInternalRoute": false,
     "featured": false
   },
@@ -265,7 +265,7 @@
     "title": "Hedef Hassasiyeti",
     "icon": "🎯🏹",
     "category": "mouse",
-    "path": "Games/TargetPrecision/game.html",
+    "path": "Games/TargetPrecision/play.html",
     "isInternalRoute": false,
     "featured": false
   }
